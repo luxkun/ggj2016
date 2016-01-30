@@ -39,10 +39,10 @@ namespace AShamanJourney
             lvl.Order = 10;
             timer = new TextObject(fontSize, Color.BurlyWood);
             timer.Order = 10;
-            hpNumber = new TextObject(fontSize, Color.White);
-            hpNumber.Order = 10;
-            xpNumber = new TextObject(fontSize, Color.White);
-            xpNumber.Order = 10;
+            hpNumber = new TextObject(fontSize, Color.Aquamarine);
+            hpNumber.Order = 11;
+            xpNumber = new TextObject(fontSize, Color.Aquamarine);
+            xpNumber.Order = 11;
 
             Padding = 20;
             InnerPadding = Padding / 2;
@@ -52,11 +52,17 @@ namespace AShamanJourney
         {
             base.Start();
 
+            Engine.SpawnObject("hpNumber", hpNumber);
+            hpNumber.IgnoreCamera = true;
+
             Engine.SpawnObject("hp", hp);
             hp.X = Padding;
             hp.Y = Padding;
             hp.IgnoreCamera = true;
             hp.Text = "HP";
+
+            Engine.SpawnObject("xpNumber", xpNumber);
+            xpNumber.IgnoreCamera = true;
 
             var hpMeasure = hp.Measure();
             Engine.SpawnObject("xp", xp);
@@ -116,18 +122,11 @@ namespace AShamanJourney
             hpBarBorder.Color = Color.Black;
             hpBarBorder.IgnoreCamera = true;
 
-            // TODO: FIX DOESN'T SPAWN
-            Engine.SpawnObject("hpNumber", hpNumber);
-            hpNumber.IgnoreCamera = true;
-
             Engine.SpawnObject("xpBarBorder", xpBarBorder);
             xpBarBorder.X = xp.X + xpMeasure.X + InnerPadding;
             xpBarBorder.Y = xp.Y;
             xpBarBorder.Color = Color.Black;
             xpBarBorder.IgnoreCamera = true;
-
-            Engine.SpawnObject("xpNumber", xpNumber);
-            xpNumber.IgnoreCamera = true;
         }
 
         public void UpdateHp(Player player)
