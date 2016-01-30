@@ -35,6 +35,16 @@ namespace AShamanJourney
                 bottomSprite.Y = value + topSprite.Height;
             }
         }
+        public override int Order
+        {
+            get { return base.Order; }
+            set
+            {
+                base.Order = value;
+                topSprite.Order = value;
+                bottomSprite.Order = value;
+            }
+        }
 
         public override void Start()
         {

@@ -50,10 +50,11 @@ namespace AShamanJourney
 
             // details
             objectsSpawnRate.Add(new Dictionary<GameObject, float>());
-            //var tree0AssetTop = (SpriteAsset)Engine.GetAsset("tree0_top");
-            //var tree0AssetBottom = (SpriteAsset)Engine.GetAsset("tree0_bottom");
-            //var tree0 = new TruncatedObject("tree0", tree0AssetBottom, tree0AssetTop);
-            //objectsSpawnRate[0][tree0] = 1f;
+            var tree0AssetTop = (SpriteAsset)Engine.GetAsset("tree0_top");
+            var tree0AssetBottom = (SpriteAsset)Engine.GetAsset("tree0_bottom");
+            var tree0 = new TruncatedObject("tree0", tree0AssetBottom, tree0AssetTop);
+            tree0.Order = 2;
+            objectsSpawnRate[0][tree0] = 1f;
 
             var swamp0Asset = (SpriteAsset)Engine.GetAsset("swamp0");
             var swamp0 = new SpriteObject(swamp0Asset.Width, swamp0Asset.Height);

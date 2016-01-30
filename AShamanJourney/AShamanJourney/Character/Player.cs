@@ -22,6 +22,7 @@ namespace AShamanJourney
         public Player(string name, int width, int height) : base(name, width, height, LevelUpModifiers)
         {
             Stats.Hp = 100f;
+            Stats.MaxHp = 100f;
             Stats.Speed = 100f;
             Stats.Attack = 100f;
             Stats.XpForNextLevel = 100;
@@ -38,6 +39,8 @@ namespace AShamanJourney
                 hud.UpdateHp((Player) sender);
             };
             OnXpChanged += (sender, delta) => hud.UpdateXp((Player) sender);
+            hud.UpdateHp(this);
+            hud.UpdateXp(this);
         }
 
         private void LoadAnimations()

@@ -37,9 +37,6 @@ namespace AShamanJourney
 
             Engine.SpawnObject(player);
             Engine.SpawnObject("world", world);
-
-            ((Hud)Engine.Objects["hud"]).UpdateHp(player);
-            ((Hud)Engine.Objects["hud"]).UpdateXp(player);
         }
     }
 }

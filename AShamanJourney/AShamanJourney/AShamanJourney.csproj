@@ -92,6 +92,9 @@
     <Content Include="assets\player.png" />
     <Content Include="assets\swamp0.png" />
     <Content Include="assets\tree0.png" />
+    <Content Include="openal32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
