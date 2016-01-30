@@ -23,7 +23,7 @@ namespace AShamanJourney
         {
             Stats.Hp = 100f;
             Stats.MaxHp = 100f;
-            Stats.Speed = 100f;
+            Stats.Speed = 500f;
             Stats.Attack = 100f;
             Stats.XpForNextLevel = 100;
         }
@@ -52,6 +52,7 @@ namespace AShamanJourney
         public override void Update()
         {
             base.Update();
+            if (GameManager.MainWindow != "game") return;
             ManageInput();
             ManageCollisions();
         }
@@ -111,7 +112,8 @@ namespace AShamanJourney
             bool collided = false;
             foreach (var collision in CheckCollisions())
             {
-                collided = true;
+                if (!(collision.Other is Ritual))
+                    collided = true;
             }
             if (collided)
             {

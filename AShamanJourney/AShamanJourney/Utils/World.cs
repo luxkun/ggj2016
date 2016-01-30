@@ -51,34 +51,47 @@ namespace AShamanJourney
             // details
             objectsSpawnRate.Add(new Dictionary<GameObject, float>());
             var swamp0Asset = (SpriteAsset)Engine.GetAsset("swamp0");
-            var swamp0 = new SpriteObject(swamp0Asset.Width, swamp0Asset.Height, true);
-            swamp0.Name = "swamp0";
-            swamp0.CurrentSprite = swamp0Asset;
-            swamp0.Order = 2;
+            var swamp0 = new SpriteObject(swamp0Asset.Width, swamp0Asset.Height, true)
+            {
+                Name = "swamp0",
+                CurrentSprite = swamp0Asset,
+                Order = 2
+            };
             objectsSpawnRate[0][swamp0] = 0.2f;
 
             var tree0AssetTop = (SpriteAsset)Engine.GetAsset("tree0_top");
             var tree0AssetBottom = (SpriteAsset)Engine.GetAsset("tree0_bottom");
-            var tree0 = new TruncatedObject("tree0", tree0AssetBottom, tree0AssetTop);
-            tree0.Order = 2;
+            var tree0 = new TruncatedObject("tree0", tree0AssetBottom, tree0AssetTop) {Order = 2};
             objectsSpawnRate[0][tree0] = 1f;
+
+            var ritualAsset = (SpriteAsset) Engine.GetAsset("ritual0_0_0");
+            var ritual0 = new Ritual(ritualAsset.Width, ritualAsset.Height, Ritual.RitualType.Demoniac) {Order = 2};
+            var ritual1 = new Ritual(ritualAsset.Width, ritualAsset.Height, Ritual.RitualType.Earth) {Order = 2};
+            var ritual2 = new Ritual(ritualAsset.Width, ritualAsset.Height, Ritual.RitualType.Life) {Order = 2};
+            objectsSpawnRate[0][ritual0] = 10.1f;
+            objectsSpawnRate[0][ritual1] = 0.1f;
+            objectsSpawnRate[0][ritual2] = 0.1f;
 
             // backgrounds
             objectsSpawnRate.Add(new Dictionary<GameObject, float>());
             var background0Asset = (SpriteAsset)Engine.GetAsset("background0");
-            var background0 = new SpriteObject(background0Asset.Width, background0Asset.Height);
-            background0.Name = "background0";
-            background0.CurrentSprite = background0Asset;
-            background0.Order = 0;
+            var background0 = new SpriteObject(background0Asset.Width, background0Asset.Height)
+            {
+                Name = "background0",
+                CurrentSprite = background0Asset,
+                Order = 0
+            };
             objectsSpawnRate[1][background0] = 1f;
 
             // enemies
             objectsSpawnRate.Add(new Dictionary<GameObject, float>());
             var bearAsset = (SpriteAsset)Engine.GetAsset("bear");
-            var bear = new SpriteObject(bearAsset.Width, bearAsset.Height);
-            bear.Name = "bear0";
-            bear.CurrentSprite = bearAsset;
-            bear.Order = 6;
+            var bear = new SpriteObject(bearAsset.Width, bearAsset.Height)
+            {
+                Name = "bear0",
+                CurrentSprite = bearAsset,
+                Order = 6
+            };
             objectsSpawnRate[2][bear] = 1f;
 
             var count = 0;
@@ -182,19 +195,19 @@ namespace AShamanJourney
             // 1
             for (int x = (int)calculatedStart.X; x < calculatedEnd.X; x += (int)defaultDetails.Width)
                 for (int y = (int)calculatedStart.Y; y < oldCalculatedStart.Y; y += (int)defaultDetails.Height)
-                    SpawnDetail(x, y);
+                    SpawnCollidable(x, y);
             // 2
             for (int x = (int)oldCalculatedEnd.X; x < calculatedEnd.X; x += (int)defaultDetails.Width)
                 for (int y = (int)oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultDetails.Height)
-                    SpawnDetail(x, y);
+                    SpawnCollidable(x, y);
             // 3
             for (int x = (int)oldCalculatedStart.X; x < oldCalculatedEnd.X; x += (int)defaultDetails.Width)
                 for (int y = (int)oldCalculatedEnd.Y; y < calculatedEnd.Y; y += (int)defaultDetails.Height)
-                    SpawnDetail(x, y);
+                    SpawnCollidable(x, y);
             // 4
             for (int x = (int)calculatedStart.X; x < oldCalculatedStart.X; x += (int)defaultDetails.Width)
                 for (int y = (int)oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultDetails.Height)
-                    SpawnDetail(x, y);
+                    SpawnCollidable(x, y);
         }
 
         private void SpawnEnemy(int x, int y)
@@ -207,7 +220,7 @@ namespace AShamanJourney
             Engine.SpawnObject(obj);
         }
 
-        private void SpawnDetail(int x, int y)
+        private void SpawnCollidable(int x, int y)
         {
             var obj = PickRandomObject(0);
             if (obj == null)

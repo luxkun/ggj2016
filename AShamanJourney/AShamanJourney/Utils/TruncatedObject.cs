@@ -4,10 +4,10 @@ namespace AShamanJourney
 {
     public class TruncatedObject : SpriteObject
     {
-        private SpriteObject topSprite;
-        private SpriteObject bottomSprite;
-        private SpriteAsset bottomSpriteAsset;
-        private SpriteAsset topSpriteAsset;
+        private readonly SpriteObject topSprite;
+        private readonly SpriteObject bottomSprite;
+        private readonly SpriteAsset bottomSpriteAsset;
+        private readonly SpriteAsset topSpriteAsset;
 
         public TruncatedObject(string name, SpriteAsset bottomSpriteAsset, SpriteAsset topSpriteAsset) : base(bottomSpriteAsset.Width, bottomSpriteAsset.Height)
         {

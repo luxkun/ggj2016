@@ -96,7 +96,7 @@ namespace AShamanJourney
             lvl.X = xp.X;
             lvl.Y = xp.Y + xpMeasure.Y + InnerPadding;
             lvl.IgnoreCamera = true;
-            lvl.Text = $"Level 0";
+            lvl.Text = $"Level 1";
 
             Engine.SpawnObject("timer", timer);
             timer.X = lvl.X;
@@ -145,7 +145,7 @@ namespace AShamanJourney
             var xpNumberMeasure = xpNumber.Measure();
             xpNumber.X = xpBarBorder.X + (xpBarBorder.Width / 2) - (xpNumberMeasure.X / 2);
             xpNumber.Y = xpBarBorder.Y + (xpBarBorder.Height / 2) - (xpNumberMeasure.Y / 2);
-            lvl.Text = $"Level {player.Stats.Level}";
+            lvl.Text = $"Level {player.Stats.Level + 1}";
         }
         public void UpdateTimer()
         {

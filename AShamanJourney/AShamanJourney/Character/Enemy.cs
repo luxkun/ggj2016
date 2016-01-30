@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace AShamanJourney
 {
-    class Enemy : Character
+    public class Enemy : Character
     {
-
-
-        public Enemy()
+        public Enemy(string name, int width, int height, Dictionary<string, float> levelUpModifiers) : base(name, width, height, levelUpModifiers)
         {
-
         }
     }
 }

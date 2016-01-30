@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Aiv.Engine;
 
-namespace AShamanJourney.Character
+namespace AShamanJourney
 {
-    class EnemyInfo
+    public class EnemyInfo
     {
         public Enemy bear;
         public Enemy wolf;
