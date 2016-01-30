@@ -35,7 +35,7 @@ namespace AShamanJourney
             xp = new TextObject(fontSize, Color.AliceBlue);
             lvl = new TextObject(fontSize, Color.ForestGreen);
             timer = new TextObject(fontSize, Color.BurlyWood);
-            xpNumber = new TextObject(fontSize, Color.White);
+            hpNumber = new TextObject(fontSize, Color.White);
             xpNumber = new TextObject(fontSize, Color.White);
 
             Padding = 20;
@@ -107,7 +107,7 @@ namespace AShamanJourney
             hpNumber.X = hpBarBorder.X + (hpBarBorder.Width / 2) - (hpNumberMeasure.X / 2);
             hpNumber.Y = hpBarBorder.Y + (hpBarBorder.Height / 2) - (hpNumberMeasure.Y / 2);
             hpNumber.IgnoreCamera = true;
-            hpNumber.Text = $"Timer 0";
+            hpNumber.Text = "0/0";
 
             Engine.SpawnObject("xpBarBorder", xpBarBorder);
             xpBarBorder.X = xp.X + xpMeasure.X + InnerPadding;
@@ -120,7 +120,7 @@ namespace AShamanJourney
             xpNumber.X = xpBarBorder.X + (xpBarBorder.Width / 2) - (xpNumberMeasure.X / 2);
             xpNumber.Y = xpBarBorder.Y + (xpBarBorder.Height / 2) - (xpNumberMeasure.Y / 2);
             xpNumber.IgnoreCamera = true;
-
+            xpNumber.Text = "0/0";
 
         }
 
@@ -134,7 +134,6 @@ namespace AShamanJourney
             xpBar.Scale = new Vector2(player.Stats.Xp / player.Stats.XpForNextLevel, 1f);
             lvl.Text = $"Level {player.Stats.Level}";
         }
-
         public void UpdateTimer()
         {
             timer.Text = $"Timer {GameManager.LocalTimer} / {GameManager.GlobalTimer}";
