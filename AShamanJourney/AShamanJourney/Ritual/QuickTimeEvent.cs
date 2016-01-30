@@ -18,6 +18,7 @@ namespace AShamanJourney
         private readonly List<TextObject> qteList;
         private SpriteObject qteBox;
         private bool canFail;
+        private bool started;
 
         public QuickTimeEvent(Ritual ritual)
         {
@@ -44,14 +45,40 @@ namespace AShamanJourney
             speed = 160f + GameManager.GlobalTimer/60f;
             KeyPadding = 300f - GameManager.GlobalTimer / 60f * 3f;
 
+            QteLogo0 = new TextObject(3f, Color.Crimson)
+            {
+                Order = 12,
+                Text = "RITUAL"
+            };
+            QteLogo1 = new TextObject(3f, Color.Crimson)
+            {
+                Order = 12,
+                Text = "TIME !"
+            };
+            var logoMeasure0 = QteLogo0.Measure();
+            var logoMeasure1 = QteLogo1.Measure();
+            QteLogo0.X = Engine.Width/2 - logoMeasure0.X/2;
+            QteLogo0.Y = Engine.Height/2 - (logoMeasure0.Y + logoMeasure1.Y)/2;
+            QteLogo1.X = Engine.Width/2 - logoMeasure1.X/2;
+            QteLogo1.Y = QteLogo0.Y + logoMeasure0.Y;
+            Engine.SpawnObject($"{Name}_logo0", QteLogo0);
+            Engine.SpawnObject($"{Name}_logo1", QteLogo1);
+            Timer.Set("startQte", 3f, ignoreTimeModifier: true);
+        }
+
+        private void StartEvent()
+        {
+            started = true;
+
             var xPos = 0f;
             var maxHeight = 0f;
             foreach (var key in Utils.RandomKeys(5 + (int)GameManager.GlobalTimer / 60, KeyCodeForQte))
             {
                 var text = new TextObject(FontSize, Color.Crimson)
                 {
-                    Text = $"{key}",
-                    Order = 10
+                    Text = $"{KeyToText(key)}",
+                    Order = 10,
+                    IgnoreCamera = true
                 };
                 var textMeasure = text.Measure();
                 text.X = Engine.Width - textMeasure.X / 2f + xPos;
@@ -63,14 +90,15 @@ namespace AShamanJourney
                 if (textMeasure.Y > maxHeight)
                     maxHeight = textMeasure.Y;
             }
-            var qteBoxAsset = (SpriteAsset) Engine.GetAsset("qteContainer");
-            qteBox = new SpriteObject(qteBoxAsset.Width, qteBoxAsset.Height)
+            var qteBoxAsset = (SpriteAsset)Engine.GetAsset("qteContainer");
+            qteBox = new SpriteObject(qteBoxAsset.Width, (int)(qteBoxAsset.Height * 0.66f))
             {
-                Order = 11, 
-                CurrentSprite = qteBoxAsset
+                Order = 11,
+                CurrentSprite = qteBoxAsset,
+                IgnoreCamera = true
             };
             qteBox.X = Engine.Width / 2 - qteBox.Width / 2;
-            qteBox.Y = Engine.Height - qteBox.Height - Padding;
+            qteBox.Y = Engine.Height - qteBox.Height - Padding * 0.5f;
             Engine.SpawnObject($"{Name}_qteBox", qteBox);
         }
 
@@ -78,7 +106,7 @@ namespace AShamanJourney
 
         public float Padding { get; set; } = 15f;
 
-        public float FontSize { get; set; } = 0.5f;
+        public float FontSize { get; set; } = 0.66f;
 
         public static KeyCode[] KeyCodeForQte { get; } = {
             KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D, KeyCode.Up, KeyCode.Right, KeyCode.Down, KeyCode.Left
@@ -88,12 +116,25 @@ namespace AShamanJourney
         {
             base.Update();
             if (GameManager.MainWindow != "game" || Success) return;
+            if (!started)
+            {
+                if (Timer.Get("startQte") <= 0) { 
+                    StartEvent();
+                    QteLogo0.Destroy();
+                    QteLogo1.Destroy();
+                }
+                return;
+            }
+
             foreach (var item in qteList)
             {
                 item.X -= Engine.UnchangedDeltaTime * speed;
             }
             Input();
         }
+
+        public TextObject QteLogo0 { get; private set; }
+        public TextObject QteLogo1 { get; private set; }
 
         private void Input()
         {
@@ -102,14 +143,27 @@ namespace AShamanJourney
             foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
             {
                 if (Engine.IsKeyDown(key))
-                    pressedKeys.Add(key.ToString());
+                {
+                    Console.WriteLine(key);
+                    pressedKeys.Add(KeyToText(key));
+                }
             }
             //if (pressedKeys.Count == 0)
             //    return;
 
             if (qteList[0].X >= qteBox.X && qteList[0].X <= qteBox.X + qteBox.Width) // success
             {
+                canFail = true;
+                if (CurrentKey != qteList[0])
+                {
+                    //qteList[0].Color = Color.AntiqueWhite;
+                    qteList[0].Scale *= 2f;
+                    qteList[0].Y = Engine.Height - qteList[0].Measure().Y - Padding;
+                    CurrentKey = qteList[0];
+                }
                 if (pressedKeys.Contains(qteList[0].Text)) { 
+                    CurrentKey.Destroy();
+                    CurrentKey = null;
                     qteList.RemoveAt(0);
                     canFail = false;
                     if (qteList.Count == 0)
@@ -117,8 +171,7 @@ namespace AShamanJourney
                         Success = true;
                         Destroy();
                     }
-                } else
-                    canFail = true;
+                }
             }
             else if (canFail) // failed hard
             {
@@ -126,6 +179,24 @@ namespace AShamanJourney
                 Destroy();
             }
         }
+
+        private string KeyToText(KeyCode key)
+        {
+            string result;
+            if (key == KeyCode.Up)
+                result = "è";
+            else if (key == KeyCode.Left)
+                result = "ò";
+            else if (key == KeyCode.Down)
+                result = "à";
+            else if (key == KeyCode.Right)
+                result = "ù";
+            else
+                result = key.ToString();
+            return result.ToUpper();
+        }
+
+        public TextObject CurrentKey { get; set; }
 
         public bool Success { get; set; }
     }

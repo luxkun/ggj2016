@@ -10,6 +10,7 @@ namespace AShamanJourney
 {
     public class Ritual : SpriteObject
     {
+        private static int activatedRituals;
         public bool ActivatedRitual { get; private set; }
         public enum RitualType { Demoniac, Earth, Life};
         public RitualType ritualType { get; }
@@ -55,7 +56,30 @@ namespace AShamanJourney
 
         public void Activated(bool success)
         {
-            throw new NotImplementedException();
+            if (success)
+            {
+                switch (ritualType)
+                {
+                    case RitualType.Demoniac:
+                    case RitualType.Earth:
+                    case RitualType.Life:
+                        SpawnMinion();
+                        break;
+                }
+                GameManager.LocalTimer *= 0.5f;
+            }
+            else
+            {
+                GameManager.LocalTimer *= 1.1f;
+            }
+            AutomaticHitBox = false;
+            HitBoxes.Clear();
+        }
+
+        private void SpawnMinion()
+        {
+            var minion = new Minion(60, 40, (Minion.MinionType) ritualType);
+            Engine.SpawnObject($"{Name}_{minion.Name}_n{activatedRituals++}", minion);
         }
     }
 }

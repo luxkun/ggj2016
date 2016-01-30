@@ -177,7 +177,7 @@ namespace AShamanJourney
             //Engine.SpawnObject($"{Name}_bouncebackforce_{forceCount++}", force);
         }
 
-        protected void CalculateMovingState(Vector2 direction)
+        protected virtual void CalculateMovingState(Vector2 direction)
         {
             direction.Normalize();
             //var cos = Math.Acos(direction.X);
@@ -189,6 +189,28 @@ namespace AShamanJourney
                 movingState = y >= 0 ? MovingState.MovingDown : MovingState.MovingUp;
             else
                 movingState = x >= 0 ? MovingState.MovingRight : MovingState.MovingLeft;
+            // TODO: change currentanimation
+            if (Animations != null && Animations.Count > 0)
+            {
+                switch (movingState)
+                {
+                    case MovingState.MovingDown:
+                        CurrentAnimation = "movingDown";
+                        break;
+                    case MovingState.MovingLeft:
+                        CurrentAnimation = "movingLeft";
+                        break;
+                    case MovingState.MovingRight:
+                        CurrentAnimation = "movingRight";
+                        break;
+                    case MovingState.MovingUp:
+                        CurrentAnimation = "movingUp";
+                        break;
+                    case MovingState.Idle:
+                        CurrentAnimation = "idle";
+                        break;
+                }
+            }
         }
 
         public string GetMovingStateString()

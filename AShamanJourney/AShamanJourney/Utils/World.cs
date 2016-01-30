@@ -10,7 +10,7 @@ namespace AShamanJourney
     internal class World : GameObject
     {
         private readonly List<Dictionary<GameObject, float>> objectsSpawnRate;
-        private readonly List<List<GameObject>> spawnedObjects;
+        public static List<List<GameObject>> SpawnedObjects;
         private readonly List<float> spawnChance; 
         private readonly List<float> rndRanges;
 
@@ -26,7 +26,7 @@ namespace AShamanJourney
             maxPosition = Vector2.Zero;
 
             objectsSpawnRate = new List<Dictionary<GameObject, float>>();
-            spawnedObjects = new List<List<GameObject>>
+            SpawnedObjects = new List<List<GameObject>>
             {
                 new List<GameObject>(), new List<GameObject>(), new List<GameObject>()
             };
@@ -250,7 +250,7 @@ namespace AShamanJourney
             result.Name += Utils.RandomString(10); // TODO: calculate this
             //result.Xp = result.LevelManager.levelUpTable[level].NeededXp;
             //result.LevelCheck();
-            spawnedObjects[type].Add(result);
+            SpawnedObjects[type].Add(result);
             return result;
         }
     }

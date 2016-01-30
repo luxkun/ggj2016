@@ -29,6 +29,10 @@ namespace AShamanJourney
             TextConfig.Default = new TextConfig(
                 new Asset("ArcadeFont.png"),
                 new Dictionary<char, Tuple<Vector2, Vector2>>  {
+                    {"è".ToUpper()[0], Tuple.Create(new Vector2(287f, 290f), new Vector2(63f, 63f))}, // TOP
+                    {"à".ToUpper()[0], Tuple.Create(new Vector2(357f, 290f), new Vector2(63f, 63f))}, // LEFT
+                    {"ò".ToUpper()[0], Tuple.Create(new Vector2(428f, 290f), new Vector2(63f, 63f))}, // DOWN
+                    {"ù".ToUpper()[0], Tuple.Create(new Vector2(498f, 290f), new Vector2(63f, 63f))}, // RIGHT
                     {'0', Tuple.Create(new Vector2(682f, 415f), new Vector2(63f, 63f))},
                     {'1', Tuple.Create(new Vector2(22f, 415f), new Vector2(57f, 63f))},
                     {'2', Tuple.Create(new Vector2(89f, 415f), new Vector2(64f, 63f))},
@@ -99,10 +103,15 @@ namespace AShamanJourney
             engine.LoadAsset("tree0_top", new SpriteAsset("tree0.png", 0, 0, tree.Width, tree.Height / 2));
             engine.LoadAsset("tree0_bottom", new SpriteAsset("tree0.png", 0, tree.Height / 2, tree.Width, tree.Height / 2));
 
+            // enemies
+            Utils.LoadAnimation(engine, "earthMinion", "earthMinion.png", 4, 4);
+            engine.LoadAsset("earthMinionBullet", new SpriteAsset("singleBullet.png"));
+
             Utils.LoadAnimation(engine, "ritual0", "ritual0.png", 5, 1);
             Utils.LoadAnimation(engine, "ritual1", "ritual1.png", 5, 1);
             Utils.LoadAnimation(engine, "ritual2", "ritual2.png", 5, 1);
             engine.LoadAsset("qteContainer", new SpriteAsset("QteContainer.png"));
+
         }
 
         public static void Run()

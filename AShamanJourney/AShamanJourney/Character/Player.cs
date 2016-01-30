@@ -13,10 +13,10 @@ namespace AShamanJourney
     {
         private Vector2 lastPosition;
 
-        private static readonly Dictionary<string, float> LevelUpModifiers = new Dictionary<string, float>()
+        public static readonly Dictionary<string, float> LevelUpModifiers = new Dictionary<string, float>()
         {
-            { "attack", 0.1f }, { "maxHp", 0.1f }, { "xpReward", 0.1f },
-            { "speed", 0.1f }, { "xpForNextLevel", 0.2f }
+            { "attack", 1.1f }, { "maxHp", 1.1f }, { "xpReward", 1.1f },
+            { "speed", 1.1f }, { "xpForNextLevel", 1.2f }, { "attackSpeed", 1.1f }
         };
 
         public Player(string name, int width, int height) : base(name, width, height, LevelUpModifiers)
@@ -25,7 +25,9 @@ namespace AShamanJourney
             Stats.MaxHp = 100f;
             Stats.Speed = 500f;
             Stats.Attack = 100f;
+            Stats.AttackSpeed = 0.8f;
             Stats.XpForNextLevel = 100;
+            Stats.RangedSpeed = 300f;
         }
 
         public override void Start()

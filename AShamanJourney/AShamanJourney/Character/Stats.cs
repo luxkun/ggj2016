@@ -19,7 +19,7 @@ namespace AShamanJourney
 
         public Dictionary<string, float> LevelUpModifiers { get; set; } 
 
-        public Character Owner { get; }
+        public Character Owner { get; set; }
 
         public float Hp
         {
@@ -105,6 +105,14 @@ namespace AShamanJourney
                 xpForNextLevel = value;
                 Owner.XpChanged(0);
             }
+        }
+
+        public float AttackSpeed { get; set; }
+        public float RangedSpeed { get; set; }
+
+        public Stats Clone()
+        {
+            return (Stats) MemberwiseClone();
         }
     }
 }

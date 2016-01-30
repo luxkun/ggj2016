@@ -42,8 +42,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\AEngine\AEngine\bin\Debug\aiv-vorbis.dll</HintPath>
     </Reference>
-    <Reference Include="aivengine, Version=1.0.5864.26313, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="aivengine">
       <HintPath>..\..\..\aivengine-1\aivengine\bin\Debug\aivengine.dll</HintPath>
     </Reference>
     <Reference Include="NVorbis, Version=0.8.4.0, Culture=neutral, processorArchitecture=MSIL">
@@ -71,6 +70,8 @@
     <Compile Include="Character\Enemy.cs" />
     <Compile Include="Character\EnemyInfo.cs" />
     <Compile Include="Game\Hud.cs" />
+    <Compile Include="Ritual\Bullet.cs" />
+    <Compile Include="Ritual\Minion.cs" />
     <Compile Include="Ritual\QuickTimeEvent.cs" />
     <Compile Include="Ritual\Ritual.cs" />
     <Compile Include="Utils\FloatingText.cs" />
