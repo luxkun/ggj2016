@@ -18,6 +18,8 @@ namespace AShamanJourney
         private TextObject xp;
         private TextObject lvl;
         private TextObject timer;
+        private TextObject hpNumber;
+        private TextObject xpNumber;
 
         private RectangleObject hpBar;
         private RectangleObject xpBar;
@@ -33,6 +35,8 @@ namespace AShamanJourney
             xp = new TextObject(fontSize, Color.AliceBlue);
             lvl = new TextObject(fontSize, Color.ForestGreen);
             timer = new TextObject(fontSize, Color.BurlyWood);
+            xpNumber = new TextObject(fontSize, Color.White);
+            xpNumber = new TextObject(fontSize, Color.White);
 
             Padding = 20;
             InnerPadding = Padding / 2;
@@ -97,12 +101,27 @@ namespace AShamanJourney
             hpBarBorder.Y = hp.Y;
             hpBarBorder.Color = Color.Black;
             hpBarBorder.IgnoreCamera = true;
+            var hpNumberMeasure = hp.Measure();
+
+            Engine.SpawnObject("hpNumber", hpNumber);
+            hpNumber.X = hpBarBorder.X + (hpBarBorder.Width / 2) - (hpNumberMeasure.X / 2);
+            hpNumber.Y = hpBarBorder.Y + (hpBarBorder.Height / 2) - (hpNumberMeasure.Y / 2);
+            hpNumber.IgnoreCamera = true;
+            hpNumber.Text = $"Timer 0";
 
             Engine.SpawnObject("xpBarBorder", xpBarBorder);
             xpBarBorder.X = xp.X + xpMeasure.X + InnerPadding;
             xpBarBorder.Y = xp.Y;
             xpBarBorder.Color = Color.Black;
             xpBarBorder.IgnoreCamera = true;
+            var xpNumberMeasure = xp.Measure();
+
+            Engine.SpawnObject("xpNumber", xpNumber);
+            xpNumber.X = xpBarBorder.X + (xpBarBorder.Width / 2) - (xpNumberMeasure.X / 2);
+            xpNumber.Y = xpBarBorder.Y + (xpBarBorder.Height / 2) - (xpNumberMeasure.Y / 2);
+            xpNumber.IgnoreCamera = true;
+
+
         }
 
         public void UpdateHP(Player player)
