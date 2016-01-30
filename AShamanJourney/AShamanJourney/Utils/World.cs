@@ -11,6 +11,7 @@ namespace AShamanJourney
     {
         private readonly List<Dictionary<GameObject, float>> objectsSpawnRate;
         private readonly List<List<GameObject>> spawnedObjects;
+        private readonly List<float> spawnChance; 
         private readonly List<float> rndRanges;
 
         private Vector2 calculatedStart;
@@ -27,7 +28,11 @@ namespace AShamanJourney
             objectsSpawnRate = new List<Dictionary<GameObject, float>>();
             spawnedObjects = new List<List<GameObject>>
             {
-                new List<GameObject>(), new List<GameObject>()
+                new List<GameObject>(), new List<GameObject>(), new List<GameObject>()
+            };
+            spawnChance = new List<float>()
+            {
+                0.33f, 1f, 0.1f
             };
             rndRanges = new List<float>();
         }
@@ -36,17 +41,36 @@ namespace AShamanJourney
         {
             base.Start();
 
+            //var backgroundMaskSprite = (SpriteAsset)Engine.GetAsset("backgroundshadow0");
+            //var backgroundMask = new SpriteObject(backgroundMaskSprite.Width, backgroundMaskSprite.Height);
+            //backgroundMask.CurrentSprite = backgroundMaskSprite;
+            //backgroundMask.Order = 1;
+            //backgroundMask.IgnoreCamera = true;
+            //Engine.SpawnObject("backgroundMask", backgroundMask);
+
+            // details
             objectsSpawnRate.Add(new Dictionary<GameObject, float>());
-            var details0Asset = (SpriteAsset)Engine.GetAsset("details0");
+            var details0Asset = (SpriteAsset)Engine.GetAsset("tree0");
             var details0 = new SpriteObject(details0Asset.Width/2, details0Asset.Height/2);
             details0.CurrentSprite = details0Asset;
+            details0.Order = 2;
             objectsSpawnRate[0][details0] = 1f;
 
+            // backgrounds
             objectsSpawnRate.Add(new Dictionary<GameObject, float>());
             var background0Asset = (SpriteAsset)Engine.GetAsset("background0");
-            var background0 = new SpriteObject(background0Asset.Width/3, background0Asset.Height/3);
+            var background0 = new SpriteObject(background0Asset.Width, background0Asset.Height);
             background0.CurrentSprite = background0Asset;
+            background0.Order = 0;
             objectsSpawnRate[1][background0] = 1f;
+
+            // enemies
+            objectsSpawnRate.Add(new Dictionary<GameObject, float>());
+            var bearAsset = (SpriteAsset)Engine.GetAsset("bear");
+            var bear = new SpriteObject(bearAsset.Width, bearAsset.Height);
+            bear.CurrentSprite = bearAsset;
+            bear.Order = 6;
+            objectsSpawnRate[2][bear] = 1f;
 
             var count = 0;
             foreach (var list in objectsSpawnRate)
@@ -59,7 +83,7 @@ namespace AShamanJourney
                 count++;
             }
 
-            maxPosition = new Vector2(Engine.Width*2, Engine.Height*2);
+            maxPosition = new Vector2(Engine.Width*3, Engine.Height*3);
             var player = (Player) Engine.Objects["player"];
             calculatedStart = new Vector2(player.X, player.Y);
             calculatedEnd = new Vector2(player.X, player.Y);
@@ -68,8 +92,8 @@ namespace AShamanJourney
 
         public override void Update()
         {
-            if (GameManager.MainWindow == "game")
-                OpenWorldManager();
+            //if (GameManager.MainWindow == "game")
+            //    OpenWorldManager();
         }
 
         private void OpenWorldManager()
@@ -77,7 +101,7 @@ namespace AShamanJourney
             // destroy everything outside 
             //foreach (var o )w
             // TODO: if slow calculate spawns in "boxes"
-            var player = (Player) Engine.Objects["player"];
+            var player = (Player)Engine.Objects["player"];
             if ((player.X - calculatedStart.X) > maxPosition.X ||
                 (player.Y - calculatedStart.Y) > maxPosition.Y ||
                 (player.X - calculatedEnd.X) > maxPosition.X ||
@@ -85,6 +109,18 @@ namespace AShamanJourney
             {
                 UpdateWorld(player);
             }
+        }
+
+        private void SpawnBackground(int x, int y)
+        {
+            //if (x > oldCalculatedStart.X && x < oldCalculatedEnd.X &&
+            //    y > oldCalculatedStart.Y && y < oldCalculatedEnd.Y)
+            //    continue;
+            var obj = PickRandomObject(1);
+            obj.X = x;
+            obj.Y = y;
+            Engine.SpawnObject(obj);
+            Console.WriteLine(x + " " + y);
         }
 
         private void UpdateWorld(Player player)
@@ -97,75 +133,86 @@ namespace AShamanJourney
             var defaultBackground = (SpriteObject)objectsSpawnRate[1].Keys.ElementAt(0);
             var defaultDetails = (SpriteObject)objectsSpawnRate[0].Keys.ElementAt(0);
 
-
             // SPAWN BACKGROUND
+            // 1
             for (int x = (int)calculatedStart.X; x < calculatedEnd.X; x += (int)defaultBackground.Width)
-                for (int y = (int)calculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
-                {
-                    if (x > oldCalculatedStart.X && x < oldCalculatedEnd.X && 
-                        y > oldCalculatedStart.Y && y < oldCalculatedEnd.Y)
-                        continue;
-                    var obj = PickRandomObject(1);
-                    obj.X = x;
-                    obj.Y = y;
-                    Engine.SpawnObject(obj);
-                    Console.WriteLine(x + " " + y);
-                }
+                for (int y = (int)calculatedStart.Y; y < oldCalculatedStart.Y; y += (int)defaultBackground.Height)
+                    SpawnBackground(x, y);
+            // 2
+            for (int x = (int)oldCalculatedEnd.X; x < calculatedEnd.X; x += (int)defaultBackground.Width)
+                for (int y = (int)oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
+                    SpawnBackground(x, y);
+            // 3
+            for (int x = (int)oldCalculatedStart.X; x < oldCalculatedEnd.X; x += (int)defaultBackground.Width)
+                for (int y = (int)oldCalculatedEnd.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
+                    SpawnBackground(x, y);
+            // 4
+            for (int x = (int)calculatedStart.X; x < oldCalculatedStart.X; x += (int)defaultBackground.Width)
+                for (int y = (int)oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
+                    SpawnBackground(x, y);
 
-            //for (int x = (int)calculatedStart.X; x < oldCalculatedStart.X; x += (int)defaultBackground.Width)
-            //    for (int y = (int)calculatedStart.Y; y < oldCalculatedStart.Y; y += (int)defaultBackground.Height)
-            //    {
-            //        var obj = PickRandomObject(1);
-            //        obj.X = x;
-            //        obj.Y = y;
-            //        Engine.SpawnObject(obj);
-            //        Console.WriteLine(x + " " + y);
-            //    }
-            //// new parts at right
-            //for (int x = (int)oldCalculatedEnd.X; x < calculatedEnd.X; x += (int)defaultBackground.Width)
-            //    for (int y = (int)oldCalculatedEnd.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
-            //    {
-            //        var obj = PickRandomObject(1);
-            //        obj.X = x;
-            //        obj.Y = y;
-            //        Engine.SpawnObject(obj);
-            //    }
+            // SPAWN ENEMIES
+            // 1
+            for (int x = (int)calculatedStart.X; x < calculatedEnd.X; x += (int)defaultBackground.Width)
+                for (int y = (int)calculatedStart.Y; y < oldCalculatedStart.Y; y += (int)defaultBackground.Height)
+                    SpawnEnemy(x, y);
+            // 2
+            for (int x = (int)oldCalculatedEnd.X; x < calculatedEnd.X; x += (int)defaultBackground.Width)
+                for (int y = (int)oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
+                    SpawnEnemy(x, y);
+            // 3
+            for (int x = (int)oldCalculatedStart.X; x < oldCalculatedEnd.X; x += (int)defaultBackground.Width)
+                for (int y = (int)oldCalculatedEnd.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
+                    SpawnEnemy(x, y);
+            // 4
+            for (int x = (int)calculatedStart.X; x < oldCalculatedStart.X; x += (int)defaultBackground.Width)
+                for (int y = (int)oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
+                    SpawnEnemy(x, y);
 
             // SPAWN RANDOM OBJECTS
+            // 1
             for (int x = (int)calculatedStart.X; x < calculatedEnd.X; x += (int)defaultDetails.Width)
-                for (int y = (int)calculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
-                {
-                    if (x > oldCalculatedStart.X && x < oldCalculatedEnd.X &&
-                        y > oldCalculatedStart.Y && y < oldCalculatedEnd.Y)
-                        continue;
-                    var obj = PickRandomObject(0);
-                    obj.X = x;
-                    obj.Y = y;
-                    Engine.SpawnObject(obj);
-                    Console.WriteLine("--" + x + " " + y);
-                }
-            //// new parts at left
-            //for (int x = (int)calculatedStart.X; x < oldCalculatedStart.X; x += (int)defaultDetails.Width)
-            //    for (int y = (int)calculatedStart.Y; y < oldCalculatedStart.Y; y += (int)defaultDetails.Height)
-            //    {
-            //        var obj = PickRandomObject(0);
-            //        obj.X = x;
-            //        obj.Y = y;
-            //        Engine.SpawnObject(obj);
-            //    }
-            //// new parts at right
-            //for (int x = (int)oldCalculatedEnd.X; x < calculatedEnd.X; x += (int)defaultDetails.Width)
-            //    for (int y = (int)oldCalculatedEnd.Y; y < calculatedEnd.Y; y += (int)defaultDetails.Height)
-            //    {
-            //        var obj = PickRandomObject(0);
-            //        obj.X = x;
-            //        obj.Y = y;
-            //        Engine.SpawnObject(obj);
-            //    }
+                for (int y = (int)calculatedStart.Y; y < oldCalculatedStart.Y; y += (int)defaultDetails.Height)
+                    SpawnDetail(x, y);
+            // 2
+            for (int x = (int)oldCalculatedEnd.X; x < calculatedEnd.X; x += (int)defaultDetails.Width)
+                for (int y = (int)oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultDetails.Height)
+                    SpawnDetail(x, y);
+            // 3
+            for (int x = (int)oldCalculatedStart.X; x < oldCalculatedEnd.X; x += (int)defaultDetails.Width)
+                for (int y = (int)oldCalculatedEnd.Y; y < calculatedEnd.Y; y += (int)defaultDetails.Height)
+                    SpawnDetail(x, y);
+            // 4
+            for (int x = (int)calculatedStart.X; x < oldCalculatedStart.X; x += (int)defaultDetails.Width)
+                for (int y = (int)oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultDetails.Height)
+                    SpawnDetail(x, y);
+        }
+
+        private void SpawnEnemy(int x, int y)
+        {
+            var obj = PickRandomObject(2);
+            if (obj == null)
+                return;
+            obj.X = x;
+            obj.Y = y;
+            Engine.SpawnObject(obj);
+        }
+
+        private void SpawnDetail(int x, int y)
+        {
+            var obj = PickRandomObject(0);
+            if (obj == null)
+                return;
+            obj.X = x;
+            obj.Y = y;
+            //obj.Rotation = (float)(Math.PI * 2 * GameManager.Random.NextDouble());
+            Engine.SpawnObject(obj);
         }
 
         private SpriteObject PickRandomObject(int type)
         {
+            if (spawnChance[type] < 1f && GameManager.Random.NextDouble() > spawnChance[type])
+                return null;
             var range = (float)GameManager.Random.NextDouble() * rndRanges[type];
             var currentObjectsList = objectsSpawnRate[type].GetEnumerator();
             SpriteObject objectInfo = null;

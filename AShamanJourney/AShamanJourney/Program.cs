@@ -10,6 +10,7 @@ namespace AShamanJourney
     {
         static void Main(string[] args)
         {
+            GameManager.Initialize();
             GameManager.Run();
         }
     }

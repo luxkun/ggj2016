@@ -7,9 +7,9 @@ using Aiv.Engine;
 using System.Drawing;
 using OpenTK;
 
-namespace AShamanJourney.Character
+namespace AShamanJourney
 {
-    class HUD : GameObject
+    class Hud : GameObject
     {
         public int Padding { get; private set; }
         public int InnerPadding { get; private set; }
@@ -25,15 +25,13 @@ namespace AShamanJourney.Character
 
 
 
-        public HUD()
+        public Hud()
         {
-            hp = new TextObject(1f, Color.IndianRed);
-            xp = new TextObject(1f, Color.AliceBlue);
-            lvl = new TextObject(1f, Color.ForestGreen);
-            timer = new TextObject(1f, Color.BurlyWood);
-
-            hpBar = new RectangleObject(100, 20);
-            xpBar = new RectangleObject(100, 20);
+            var fontSize = 0.4f;
+            hp = new TextObject(fontSize, Color.IndianRed);
+            xp = new TextObject(fontSize, Color.AliceBlue);
+            lvl = new TextObject(fontSize, Color.ForestGreen);
+            timer = new TextObject(fontSize, Color.BurlyWood);
 
             Padding = 20;
             InnerPadding = Padding / 2;
@@ -57,17 +55,26 @@ namespace AShamanJourney.Character
             xp.Text = "XP";
             var xpMeasure = xp.Measure();
 
+            hpBar = new RectangleObject(150, (int) hpMeasure.Y)
+            {
+                Fill = true
+            };
+            xpBar = new RectangleObject(150, (int) xpMeasure.Y)
+            {
+                Fill = true
+            };
+
             Engine.SpawnObject("lvl", lvl);
             lvl.X = xp.X;
             lvl.Y = xp.Y + xpMeasure.Y + InnerPadding;
             lvl.IgnoreCamera = true;
-            lvl.Text = $"Level: 0";
+            lvl.Text = $"Level 0";
 
             Engine.SpawnObject("timer", timer);
             timer.X = lvl.X;
             timer.Y = lvl.Y + lvl.Measure().Y + InnerPadding;
             timer.IgnoreCamera = true;
-            timer.Text = $"Global timer: 0s - Local timer: 0s";
+            timer.Text = $"Timer 0";
 
             Engine.SpawnObject("hpBar", hpBar);
             hpBar.X = hp.X + hpMeasure.X + InnerPadding;
@@ -90,12 +97,12 @@ namespace AShamanJourney.Character
         public void UpdateXP(Player player)
         {
             xpBar.Scale = new Vector2(player.Stats.Xp / player.Stats.XpForNextLevel, 1f);
-            lvl.Text = $"Level: {player.Stats.Level}";
+            lvl.Text = $"Level {player.Stats.Level}";
         }
 
         public void UpdateTimer()
         {
-            timer.Text = $"Global timer: {GameManager.GlobalTimer} - Local timer: {GameManager.LocalTimer}";
+            timer.Text = $"Timer {GameManager.LocalTimer} / {GameManager.GlobalTimer}";
         }
     }
 }

@@ -27,9 +27,7 @@ namespace AShamanJourney
             MovingUp = 5
         }
 
-        private long xp;
-
-        public Character(string name, int width, int height)
+        public Character(string name, int width, int height, Dictionary<string, float> levelUpModifiers)
             : base(width, height, true)
         {
             Order = 8;
@@ -38,24 +36,10 @@ namespace AShamanJourney
 
             DropManager = new DropManager(this);
 
-            Stats = new Stats()
-            {
-                Hp = 1f
-            };
+            Stats = new Stats(this, levelUpModifiers);
+            Stats.Hp = 1f;
 
             OnDestroy += DestroyEvent;
-        }
-
-        public long Xp
-        {
-            get { return xp; }
-            set
-            {
-                var delta = value - xp;
-                xp = value;
-                XpChanged(delta);
-                LevelCheck();
-            }
         }
 
         public bool IsAlive => Stats.Hp > 0;
@@ -154,7 +138,7 @@ namespace AShamanJourney
 
             enemy.GetDamage(this, damage);
             if (!enemy.IsAlive)
-                Xp += enemy.Stats.XpReward;
+                Stats.Xp += enemy.Stats.XpReward;
             return enemy.IsAlive;
         }
 
