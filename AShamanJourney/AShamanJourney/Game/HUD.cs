@@ -33,15 +33,15 @@ namespace AShamanJourney
             var fontSize = 0.4f;
             hp = new TextObject(fontSize, Color.IndianRed);
             hp.Order = 10;
-            xp = new TextObject(fontSize, Color.AliceBlue);
+            xp = new TextObject(fontSize, Color.DarkBlue);
             xp.Order = 10;
             lvl = new TextObject(fontSize, Color.ForestGreen);
             lvl.Order = 10;
             timer = new TextObject(fontSize, Color.BurlyWood);
             timer.Order = 10;
-            hpNumber = new TextObject(fontSize, Color.Aquamarine);
+            hpNumber = new TextObject(fontSize / 2, Color.DarkGray);
             hpNumber.Order = 11;
-            xpNumber = new TextObject(fontSize, Color.Aquamarine);
+            xpNumber = new TextObject(fontSize / 2, Color.DarkGray);
             xpNumber.Order = 11;
 
             Padding = 20;
@@ -74,7 +74,7 @@ namespace AShamanJourney
 
             hpBar = new RectangleObject(150, (int)hpMeasure.Y)
             {
-                Fill = true, 
+                Fill = true,
                 Order = 10
             };
             xpBar = new RectangleObject(150, (int)xpMeasure.Y)
@@ -141,15 +141,15 @@ namespace AShamanJourney
         public void UpdateXp(Player player)
         {
             xpBar.Scale = new Vector2(player.Stats.Xp / player.Stats.XpForNextLevel, 1f);
-            xpNumber.Text = $"{player.Stats.Xp}-{player.Stats.XpForNextLevel}";
-            var xpNumberMeasure = xp.Measure();
+            xpNumber.Text = $"{player.Stats.Xp} - {player.Stats.XpForNextLevel}";
+            var xpNumberMeasure = xpNumber.Measure();
             xpNumber.X = xpBarBorder.X + (xpBarBorder.Width / 2) - (xpNumberMeasure.X / 2);
             xpNumber.Y = xpBarBorder.Y + (xpBarBorder.Height / 2) - (xpNumberMeasure.Y / 2);
             lvl.Text = $"Level {player.Stats.Level}";
         }
         public void UpdateTimer()
         {
-            timer.Text = $"Timer {(int) GameManager.LocalTimer} - {(int)GameManager.GlobalTimer}";
+            timer.Text = $"Timer {(int)GameManager.LocalTimer} - {(int)GameManager.GlobalTimer}";
         }
     }
 }
