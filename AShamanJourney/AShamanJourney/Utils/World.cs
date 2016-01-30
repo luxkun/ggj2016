@@ -50,22 +50,23 @@ namespace AShamanJourney
 
             // details
             objectsSpawnRate.Add(new Dictionary<GameObject, float>());
-            var tree0Asset = (SpriteAsset)Engine.GetAsset("tree0");
-            var tree0 = new SpriteObject(tree0Asset.Width / 2, tree0Asset.Height / 2);
-            tree0.CurrentSprite = tree0Asset;
-            tree0.Order = 2;
-            objectsSpawnRate[0][tree0] = 1f;
+            //var tree0AssetTop = (SpriteAsset)Engine.GetAsset("tree0_top");
+            //var tree0AssetBottom = (SpriteAsset)Engine.GetAsset("tree0_bottom");
+            //var tree0 = new TruncatedObject("tree0", tree0AssetBottom, tree0AssetTop);
+            //objectsSpawnRate[0][tree0] = 1f;
 
             var swamp0Asset = (SpriteAsset)Engine.GetAsset("swamp0");
             var swamp0 = new SpriteObject(swamp0Asset.Width, swamp0Asset.Height);
+            swamp0.Name = "swamp0";
             swamp0.CurrentSprite = swamp0Asset;
             swamp0.Order = 2;
-            objectsSpawnRate[0][swamp0] = 0.33f;
+            objectsSpawnRate[0][swamp0] = 0.2f;
 
             // backgrounds
             objectsSpawnRate.Add(new Dictionary<GameObject, float>());
             var background0Asset = (SpriteAsset)Engine.GetAsset("background0");
             var background0 = new SpriteObject(background0Asset.Width, background0Asset.Height);
+            background0.Name = "background0";
             background0.CurrentSprite = background0Asset;
             background0.Order = 0;
             objectsSpawnRate[1][background0] = 1f;
@@ -74,15 +75,16 @@ namespace AShamanJourney
             objectsSpawnRate.Add(new Dictionary<GameObject, float>());
             var bearAsset = (SpriteAsset)Engine.GetAsset("bear");
             var bear = new SpriteObject(bearAsset.Width, bearAsset.Height);
+            bear.Name = "bear0";
             bear.CurrentSprite = bearAsset;
             bear.Order = 6;
             objectsSpawnRate[2][bear] = 1f;
 
             var count = 0;
-            foreach (var list in objectsSpawnRate)
+            foreach (var dict in objectsSpawnRate)
             {
                 rndRanges.Add(0);
-                foreach (var pair in list)
+                foreach (var pair in dict)
                 {
                     rndRanges[count] += pair.Value;
                 }

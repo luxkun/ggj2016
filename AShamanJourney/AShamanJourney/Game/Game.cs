@@ -20,7 +20,7 @@ namespace AShamanJourney
         {
             GameManager.GlobalTimer += DeltaTime;
             GameManager.LocalTimer += DeltaTime;
-            //((Hud)Engine.Objects["hud"]).UpdateTimer();
+            ((Hud)Engine.Objects["hud"]).UpdateTimer();
         }
 
 

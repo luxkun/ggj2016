@@ -76,6 +76,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Character\Stats.cs" />
+    <Compile Include="Utils\TruncatedObject.cs" />
     <Compile Include="Utils\Utils.cs" />
     <Compile Include="Utils\World.cs" />
   </ItemGroup>

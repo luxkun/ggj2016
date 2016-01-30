@@ -71,6 +71,7 @@ namespace AShamanJourney
                     //{'/', Tuple.Create(new Vector2(238f, 93f), new Vector2(34f, 31f))},
                     //{':', Tuple.Create(new Vector2(296f, 93f), new Vector2(13f, 31f))},
                     {'.', Tuple.Create(new Vector2(515f, 186f), new Vector2(33f, 63f))},
+                    {',', Tuple.Create(new Vector2(206f, 290f), new Vector2(30f, 63f))},
                     //{',', Tuple.Create(new Vector2(272f, 93f), new Vector2(13f, 31f))},
                     {'"', Tuple.Create(new Vector2(564f, 186f), new Vector2(51f, 63f))},
                     //{'\'', Tuple.Create(new Vector2(285f, 93f), new Vector2(13f, 31f))}
@@ -91,7 +92,9 @@ namespace AShamanJourney
             engine.LoadAsset("player", new SpriteAsset("player.png"));
             engine.LoadAsset("background0", new SpriteAsset("background0.png"));
             engine.LoadAsset("swamp0", new SpriteAsset("swamp0.png"));
-            engine.LoadAsset("tree0", new SpriteAsset("tree0.png"));
+            var tree = new SpriteAsset("tree0.png");
+            engine.LoadAsset("tree0_top", new SpriteAsset("tree0.png", 0, 0, tree.Width / 2, tree.Height / 2));
+            engine.LoadAsset("tree0_bottom", new SpriteAsset("tree0.png", tree.Width / 2, tree.Height / 2, tree.Width, tree.Height));
             //engine.LoadAsset("backgroundshadow0", new SpriteAsset("background_shadow.png"));
         }
 

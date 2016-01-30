@@ -100,7 +100,11 @@ namespace AShamanJourney
         public long XpForNextLevel
         {
             get { return xpForNextLevel; }
-            set { xpForNextLevel = value; }
+            set
+            {
+                xpForNextLevel = value;
+                Owner.XpChanged(0);
+            }
         }
     }
 }

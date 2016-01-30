@@ -32,11 +32,17 @@ namespace AShamanJourney
         {
             var fontSize = 0.4f;
             hp = new TextObject(fontSize, Color.IndianRed);
+            hp.Order = 10;
             xp = new TextObject(fontSize, Color.AliceBlue);
+            xp.Order = 10;
             lvl = new TextObject(fontSize, Color.ForestGreen);
+            lvl.Order = 10;
             timer = new TextObject(fontSize, Color.BurlyWood);
+            timer.Order = 10;
             hpNumber = new TextObject(fontSize, Color.White);
+            hpNumber.Order = 10;
             xpNumber = new TextObject(fontSize, Color.White);
+            xpNumber.Order = 10;
 
             Padding = 20;
             InnerPadding = Padding / 2;
@@ -51,8 +57,8 @@ namespace AShamanJourney
             hp.Y = Padding;
             hp.IgnoreCamera = true;
             hp.Text = "HP";
-            var hpMeasure = hp.Measure();
 
+            var hpMeasure = hp.Measure();
             Engine.SpawnObject("xp", xp);
             xp.X = hp.X;
             xp.Y = hp.Y + hpMeasure.Y + InnerPadding;
@@ -62,15 +68,23 @@ namespace AShamanJourney
 
             hpBar = new RectangleObject(150, (int)hpMeasure.Y)
             {
-                Fill = true
+                Fill = true, 
+                Order = 10
             };
             xpBar = new RectangleObject(150, (int)xpMeasure.Y)
             {
-                Fill = true
+                Fill = true,
+                Order = 10
             };
 
-            hpBarBorder = new RectangleObject(150, (int)hpMeasure.Y);
-            xpBarBorder = new RectangleObject(150, (int)xpMeasure.Y);
+            hpBarBorder = new RectangleObject(150, (int)hpMeasure.Y)
+            {
+                Order = 10
+            };
+            xpBarBorder = new RectangleObject(150, (int)xpMeasure.Y)
+            {
+                Order = 10
+            };
 
             Engine.SpawnObject("lvl", lvl);
             lvl.X = xp.X;
@@ -101,42 +115,42 @@ namespace AShamanJourney
             hpBarBorder.Y = hp.Y;
             hpBarBorder.Color = Color.Black;
             hpBarBorder.IgnoreCamera = true;
-            var hpNumberMeasure = hp.Measure();
 
+            // TODO: FIX DOESN'T SPAWN
             Engine.SpawnObject("hpNumber", hpNumber);
-            hpNumber.X = hpBarBorder.X + (hpBarBorder.Width / 2) - (hpNumberMeasure.X / 2);
-            hpNumber.Y = hpBarBorder.Y + (hpBarBorder.Height / 2) - (hpNumberMeasure.Y / 2);
             hpNumber.IgnoreCamera = true;
-            hpNumber.Text = "0/0";
 
             Engine.SpawnObject("xpBarBorder", xpBarBorder);
             xpBarBorder.X = xp.X + xpMeasure.X + InnerPadding;
             xpBarBorder.Y = xp.Y;
             xpBarBorder.Color = Color.Black;
             xpBarBorder.IgnoreCamera = true;
-            var xpNumberMeasure = xp.Measure();
 
             Engine.SpawnObject("xpNumber", xpNumber);
-            xpNumber.X = xpBarBorder.X + (xpBarBorder.Width / 2) - (xpNumberMeasure.X / 2);
-            xpNumber.Y = xpBarBorder.Y + (xpBarBorder.Height / 2) - (xpNumberMeasure.Y / 2);
             xpNumber.IgnoreCamera = true;
-            xpNumber.Text = "0/0";
-
         }
 
-        public void UpdateHP(Player player)
+        public void UpdateHp(Player player)
         {
             hpBar.Scale = new Vector2(player.Stats.Hp / player.Stats.MaxHp, 1f);
+            hpNumber.Text = $"{player.Stats.Hp} - {player.Stats.MaxHp}";
+            var hpNumberMeasure = hpNumber.Measure();
+            hpNumber.X = hpBarBorder.X + (hpBarBorder.Width / 2) - (hpNumberMeasure.X / 2);
+            hpNumber.Y = hpBarBorder.Y + (hpBarBorder.Height / 2) - (hpNumberMeasure.Y / 2);
         }
 
-        public void UpdateXP(Player player)
+        public void UpdateXp(Player player)
         {
             xpBar.Scale = new Vector2(player.Stats.Xp / player.Stats.XpForNextLevel, 1f);
+            xpNumber.Text = $"{player.Stats.Xp}-{player.Stats.XpForNextLevel}";
+            var xpNumberMeasure = xp.Measure();
+            xpNumber.X = xpBarBorder.X + (xpBarBorder.Width / 2) - (xpNumberMeasure.X / 2);
+            xpNumber.Y = xpBarBorder.Y + (xpBarBorder.Height / 2) - (xpNumberMeasure.Y / 2);
             lvl.Text = $"Level {player.Stats.Level}";
         }
         public void UpdateTimer()
         {
-            timer.Text = $"Timer {GameManager.LocalTimer} / {GameManager.GlobalTimer}";
+            timer.Text = $"Timer {(int) GameManager.LocalTimer} - {(int)GameManager.GlobalTimer}";
         }
     }
 }
