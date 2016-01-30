@@ -46,5 +46,13 @@ namespace AShamanJourney
             boar.Stats.XpForNextLevel = 90;
             boar.radius = 100f;
         }
+
+        //private void AddAnimations()
+        //{
+        //    AddAnimation("movingDown", Utils.GetAssetName("bear", 0, 0, 2, 0), 3);
+        //    AddAnimation("movingLeft", Utils.GetAssetName("bear", 0, 1, 0), 3);
+        //    AddAnimation("movingRight", Utils.GetAssetName("bear", 0, 2, 0), 3);
+        //    AddAnimation("movingUp", Utils.GetAssetName("bear", 0, 3, 0), 3);
+        //}
     }
 }
