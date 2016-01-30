@@ -22,6 +22,7 @@ namespace AShamanJourney.Ritual
             base.Start();
             AddAnimation($"{ritualType}_Idle",  Utils.GetAssetName($"ritual_{(int)ritualType}", 0, 0), 4);
             AddAnimation($"{ritualType}_Burning", Utils.GetAssetName($"ritual_{(int)ritualType}", 1, 0, 4),4);
+            //ciao
         }
     }
 }
