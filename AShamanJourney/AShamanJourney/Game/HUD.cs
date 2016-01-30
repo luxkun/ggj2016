@@ -21,7 +21,8 @@ namespace AShamanJourney
 
         private RectangleObject hpBar;
         private RectangleObject xpBar;
-
+        private RectangleObject hpBarBorder;
+        private RectangleObject xpBarBorder;
 
 
 
@@ -55,14 +56,17 @@ namespace AShamanJourney
             xp.Text = "XP";
             var xpMeasure = xp.Measure();
 
-            hpBar = new RectangleObject(150, (int) hpMeasure.Y)
+            hpBar = new RectangleObject(150, (int)hpMeasure.Y)
             {
                 Fill = true
             };
-            xpBar = new RectangleObject(150, (int) xpMeasure.Y)
+            xpBar = new RectangleObject(150, (int)xpMeasure.Y)
             {
                 Fill = true
             };
+
+            hpBarBorder = new RectangleObject(150, (int)hpMeasure.Y);
+            xpBarBorder = new RectangleObject(150, (int)xpMeasure.Y);
 
             Engine.SpawnObject("lvl", lvl);
             lvl.X = xp.X;
@@ -87,6 +91,18 @@ namespace AShamanJourney
             xpBar.Y = xp.Y;
             xpBar.Color = Color.DarkBlue;
             xpBar.IgnoreCamera = true;
+
+            Engine.SpawnObject("hpBarBorder", hpBarBorder);
+            hpBarBorder.X = hp.X + hpMeasure.X + InnerPadding;
+            hpBarBorder.Y = hp.Y;
+            hpBarBorder.Color = Color.Black;
+            hpBarBorder.IgnoreCamera = true;
+
+            Engine.SpawnObject("xpBarBorder", xpBarBorder);
+            xpBarBorder.X = xp.X + xpMeasure.X + InnerPadding;
+            xpBarBorder.Y = xp.Y;
+            xpBarBorder.Color = Color.Black;
+            xpBarBorder.IgnoreCamera = true;
         }
 
         public void UpdateHP(Player player)
