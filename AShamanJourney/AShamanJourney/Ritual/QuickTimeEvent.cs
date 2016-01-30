@@ -24,7 +24,7 @@ namespace AShamanJourney.Ritual
 
         public void Update()
         {
-            
+
         }
     }
 }
