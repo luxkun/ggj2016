@@ -10,7 +10,7 @@ namespace AShamanJourney.Ritual
 {
     class Ritual : SpriteObject
     {
-        public enum RitualType { Demoniac, Earth };
+        public enum RitualType { Demoniac, Earth, Life};
         RitualType ritualType;
 
         public Ritual(int width, int height,RitualType rt) : base(width, height)
