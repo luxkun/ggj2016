@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Aiv.Engine;
+using Aiv.Fast2D;
 using OpenTK;
 
 namespace AShamanJourney
@@ -13,9 +15,17 @@ namespace AShamanJourney
     {
         public static string RandomString(int length, string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
         {
-            var random = new Random();
             return new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
+                .Select(s => s[GameManager.Random.Next(s.Length)]).ToArray());
+        }
+        public static List<KeyCode> RandomKeys(int length, KeyCode[] keyCodes)
+        {
+            var result = new List<KeyCode>(length);
+            for (int i = 0; i < length; i++)
+            {
+                result.Add(keyCodes[GameManager.Random.Next(keyCodes.Length)]);
+            }
+            return result;
         }
 
         public static List<string> GetAssetName(string baseName, int sX, int sY, int lenX = 1, int lenY = 1)
