@@ -53,7 +53,6 @@ namespace AShamanJourney
         {
             base.Update();
             ManageInput();
-            ManageCamera();
         }
 
         private void ManageInput()
@@ -98,6 +97,12 @@ namespace AShamanJourney
                 movingDirection.Normalize();
                 X += movingDirection.X * DeltaTime * Stats.Speed;
                 Y += movingDirection.Y * DeltaTime * Stats.Speed;
+                if (ManageCollisions())
+                {
+                    movingDirection = Vector2.Zero;
+                    X = lastPosition.X;
+                    Y = lastPosition.Y;
+                }
                 CalculateMovingState(movingDirection);
             }
             else
@@ -106,16 +111,14 @@ namespace AShamanJourney
             }
         }
 
-        private void ManageCamera()
+        private bool ManageCollisions()
         {
-            // center on the player
-            var cameraX = X - Width / 2 - Engine.Width / 2;
-            var cameraY = Y - Height / 2 - Engine.Height / 2;
-            // check if it's out bounds ??
-
-            Engine.Camera.X = cameraX;
-            Engine.Camera.Y = cameraY;
-            //Debug.WriteLine($"{Engine.Camera.X},{Engine.Camera.Y}");
+            bool collided = false;
+            foreach (var collision in CheckCollisions())
+            {
+                collided = true;
+            }
+            return collided;
         }
     }
 }

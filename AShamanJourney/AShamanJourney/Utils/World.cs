@@ -50,18 +50,18 @@ namespace AShamanJourney
 
             // details
             objectsSpawnRate.Add(new Dictionary<GameObject, float>());
+            var swamp0Asset = (SpriteAsset)Engine.GetAsset("swamp0");
+            var swamp0 = new SpriteObject(swamp0Asset.Width, swamp0Asset.Height, true);
+            swamp0.Name = "swamp0";
+            swamp0.CurrentSprite = swamp0Asset;
+            swamp0.Order = 2;
+            objectsSpawnRate[0][swamp0] = 0.2f;
+
             var tree0AssetTop = (SpriteAsset)Engine.GetAsset("tree0_top");
             var tree0AssetBottom = (SpriteAsset)Engine.GetAsset("tree0_bottom");
             var tree0 = new TruncatedObject("tree0", tree0AssetBottom, tree0AssetTop);
             tree0.Order = 2;
             objectsSpawnRate[0][tree0] = 1f;
-
-            var swamp0Asset = (SpriteAsset)Engine.GetAsset("swamp0");
-            var swamp0 = new SpriteObject(swamp0Asset.Width, swamp0Asset.Height);
-            swamp0.Name = "swamp0";
-            swamp0.CurrentSprite = swamp0Asset;
-            swamp0.Order = 2;
-            objectsSpawnRate[0][swamp0] = 0.2f;
 
             // backgrounds
             objectsSpawnRate.Add(new Dictionary<GameObject, float>());
@@ -218,22 +218,22 @@ namespace AShamanJourney
             Engine.SpawnObject(obj);
         }
 
-        private SpriteObject PickRandomObject(int type)
+        private GameObject PickRandomObject(int type)
         {
             if (spawnChance[type] < 1f && GameManager.Random.NextDouble() > spawnChance[type])
                 return null;
             var range = (float)GameManager.Random.NextDouble() * rndRanges[type];
             var currentObjectsList = objectsSpawnRate[type].GetEnumerator();
-            SpriteObject objectInfo = null;
+            GameObject objectInfo = null;
             for (var i = 0; range >= 0f && i <= objectsSpawnRate.Count; i++)
             {
                 currentObjectsList.MoveNext();
                 range -= currentObjectsList.Current.Value;
-                objectInfo = (SpriteObject) currentObjectsList.Current.Key;
+                objectInfo = currentObjectsList.Current.Key;
             }
 
             //Debug.WriteLine($"Random object: {srange} to {range}, {rndRanges[roomType]} => {enemyInfo.CharacterName}");
-            var result = (SpriteObject)objectInfo.Clone();
+            var result = objectInfo.Clone();
             result.Name += Utils.RandomString(10); // TODO: calculate this
             //result.Xp = result.LevelManager.levelUpTable[level].NeededXp;
             //result.LevelCheck();

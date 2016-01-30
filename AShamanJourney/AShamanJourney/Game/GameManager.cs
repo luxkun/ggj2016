@@ -14,6 +14,9 @@ namespace AShamanJourney
         public static void Initialize()
         {
             engine = new Engine("A Shaman's Journey", 1280, 720, 60, false);
+#if DEBUG
+            engine.debugCollisions = true;
+#endif
 
             Random = new Random();
 
@@ -93,8 +96,8 @@ namespace AShamanJourney
             engine.LoadAsset("background0", new SpriteAsset("background0.png"));
             engine.LoadAsset("swamp0", new SpriteAsset("swamp0.png"));
             var tree = new SpriteAsset("tree0.png");
-            engine.LoadAsset("tree0_top", new SpriteAsset("tree0.png", 0, 0, tree.Width / 2, tree.Height / 2));
-            engine.LoadAsset("tree0_bottom", new SpriteAsset("tree0.png", tree.Width / 2, tree.Height / 2, tree.Width, tree.Height));
+            engine.LoadAsset("tree0_top", new SpriteAsset("tree0.png", 0, 0, tree.Width, tree.Height / 2));
+            engine.LoadAsset("tree0_bottom", new SpriteAsset("tree0.png", 0, tree.Height / 2, tree.Width, tree.Height / 2));
             //engine.LoadAsset("backgroundshadow0", new SpriteAsset("background_shadow.png"));
         }
 
@@ -105,6 +108,18 @@ namespace AShamanJourney
 
             var game = new Game();
             engine.SpawnObject("game", game);
+
+            var player = (Player) engine.Objects["player"];
+            var cameraManager = new GameObject();
+            cameraManager.OnUpdate += sender =>
+            {
+                var cameraX = player.X - player.Width/2 - engine.Width/2;
+                var cameraY = player.Y - player.Height / 2 - engine.Height/2;
+                engine.Camera.X = cameraX;
+                engine.Camera.Y = cameraY;
+            };
+            cameraManager.Order = 99;
+            engine.SpawnObject("cameraManager", cameraManager);
 
             engine.Run();
         }

@@ -6,13 +6,19 @@ namespace AShamanJourney
     {
         private SpriteObject topSprite;
         private SpriteObject bottomSprite;
-        
+        private SpriteAsset bottomSpriteAsset;
+        private SpriteAsset topSpriteAsset;
+
         public TruncatedObject(string name, SpriteAsset bottomSpriteAsset, SpriteAsset topSpriteAsset) : base(bottomSpriteAsset.Width, bottomSpriteAsset.Height)
         {
             topSprite = new SpriteObject(topSpriteAsset.Width, topSpriteAsset.Height);
             topSprite.CurrentSprite = topSpriteAsset;
-            bottomSprite = new SpriteObject(bottomSpriteAsset.Width, bottomSpriteAsset.Height);
+            topSprite.Order = 9;
+            bottomSprite = new SpriteObject(bottomSpriteAsset.Width, bottomSpriteAsset.Height, true);
             bottomSprite.CurrentSprite = bottomSpriteAsset;
+            bottomSprite.Order = 1;
+            this.bottomSpriteAsset = bottomSpriteAsset;
+            this.topSpriteAsset = topSpriteAsset;
             Name = name;
         }
 
@@ -35,22 +41,18 @@ namespace AShamanJourney
                 bottomSprite.Y = value + topSprite.Height;
             }
         }
-        public override int Order
-        {
-            get { return base.Order; }
-            set
-            {
-                base.Order = value;
-                topSprite.Order = value;
-                bottomSprite.Order = value;
-            }
-        }
 
         public override void Start()
         {
             base.Start();
             Engine.SpawnObject($"{Name}_topSprite", topSprite);
             Engine.SpawnObject($"{Name}_bottomSprite", bottomSprite);
+        }
+
+        public override GameObject Clone()
+        {
+            var go = new TruncatedObject(Name, bottomSpriteAsset, topSpriteAsset);
+            return go;
         }
     }
 }

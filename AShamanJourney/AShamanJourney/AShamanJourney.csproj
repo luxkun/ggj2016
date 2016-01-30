@@ -69,6 +69,7 @@
     <Compile Include="Character\Damage.cs" />
     <Compile Include="Character\DropManager.cs" />
     <Compile Include="Game\Hud.cs" />
+    <Compile Include="Ritual\Ritual.cs" />
     <Compile Include="Utils\FloatingText.cs" />
     <Compile Include="Game\Game.cs" />
     <Compile Include="Game\GameManager.cs" />
