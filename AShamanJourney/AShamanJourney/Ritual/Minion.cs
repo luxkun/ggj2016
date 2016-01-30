@@ -21,6 +21,8 @@ namespace AShamanJourney
         {
             this.minionType = minionType;
             AutomaticHitBox = false;
+            Opacity = 0.66f;
+            Order = 7;
 
             minimumDiff = (float) ((0.66 + GameManager.Random.NextDouble())*minimumDiff);
         }
@@ -39,10 +41,10 @@ namespace AShamanJourney
                 case MinionType.Life:
                     bulletAsset = (SpriteAsset) Engine.GetAsset("earthMinionBullet");
                     AddAnimation("idle", Utils.GetAssetName("earthMinion", 0, 0), 1);
-                    AddAnimation("movingDown", Utils.GetAssetName("earthMinion", 0, 0, 4), 4);
-                    AddAnimation("movingLeft", Utils.GetAssetName("earthMinion", 0, 1, 4), 4);
-                    AddAnimation("movingRight", Utils.GetAssetName("earthMinion", 0, 2, 4), 4);
-                    AddAnimation("movingUp", Utils.GetAssetName("earthMinion", 0, 3, 4), 4);
+                    AddAnimation("movingDown", Utils.GetAssetName("earthMinion", 0, 0, 4), 8);
+                    AddAnimation("movingLeft", Utils.GetAssetName("earthMinion", 0, 1, 4), 8);
+                    AddAnimation("movingRight", Utils.GetAssetName("earthMinion", 0, 2, 4), 8);
+                    AddAnimation("movingUp", Utils.GetAssetName("earthMinion", 0, 3, 4), 8);
                     break;
             }
             CurrentAnimation = "idle";

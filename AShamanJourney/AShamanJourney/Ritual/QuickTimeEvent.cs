@@ -31,6 +31,10 @@ namespace AShamanJourney
 
         private void DestroyEvent(object sender)
         {
+            foreach (var qte in qteList.ToArray())
+                qte.Destroy();
+            qteBox.Destroy();
+
             Engine.TimeModifier = 1f;
             Ritual.Activated(Success);
         }

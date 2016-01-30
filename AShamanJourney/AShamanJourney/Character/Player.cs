@@ -19,6 +19,8 @@ namespace AShamanJourney
             { "speed", 1.1f }, { "xpForNextLevel", 1.2f }, { "attackSpeed", 1.1f }
         };
 
+        private readonly int maxCollisions = 10;
+
         public Player(string name, int width, int height) : base(name, width, height, LevelUpModifiers)
         {
             Stats.Hp = 100f;
@@ -28,6 +30,7 @@ namespace AShamanJourney
             Stats.AttackSpeed = 0.8f;
             Stats.XpForNextLevel = 100;
             Stats.RangedSpeed = 300f;
+            Order = 9;
         }
 
         public override void Start()
@@ -117,16 +120,23 @@ namespace AShamanJourney
             bool collided = false;
             foreach (var collision in CheckCollisions())
             {
-                if (!(collision.Other is Ritual))
+                if (!(collision.Other is Ritual) && InCollision > maxCollisions)
                     collided = true;
             }
             if (collided)
             {
+                InCollision++;
                 X = lastPosition.X;
                 Y = lastPosition.Y;
                 CalculateMovingState(Vector2.Zero);
             }
+            else
+            {
+                InCollision = 0;
+            }
             return collided;
         }
+
+        public int InCollision { get; set; }
     }
 }
