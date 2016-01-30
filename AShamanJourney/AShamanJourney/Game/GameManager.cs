@@ -90,17 +90,18 @@ namespace AShamanJourney
 
             engine.LoadAsset("player", new SpriteAsset("player.png"));
             engine.LoadAsset("background0", new SpriteAsset("background0.png"));
+            engine.LoadAsset("swamp0", new SpriteAsset("swamp0.png"));
             engine.LoadAsset("tree0", new SpriteAsset("tree0.png"));
-            engine.LoadAsset("backgroundshadow0", new SpriteAsset("background_shadow.png"));
+            //engine.LoadAsset("backgroundshadow0", new SpriteAsset("background_shadow.png"));
         }
 
         public static void Run()
         {
-            var game = new Game();
-            engine.SpawnObject("game", game);
-
             var hud = new Hud();
             engine.SpawnObject("hud", hud);
+
+            var game = new Game();
+            engine.SpawnObject("game", game);
 
             engine.Run();
         }

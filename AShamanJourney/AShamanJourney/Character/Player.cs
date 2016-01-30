@@ -32,6 +32,9 @@ namespace AShamanJourney
             base.Start();
             LoadAnimations();
 
+            var hud = (Hud) Engine.Objects["hud"];
+            OnHpChanged += sender => hud.UpdateHP((Player) sender);
+            OnXpChanged += (sender, delta) => hud.UpdateXP((Player) sender);
         }
 
         private void LoadAnimations()

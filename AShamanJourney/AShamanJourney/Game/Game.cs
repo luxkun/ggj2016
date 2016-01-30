@@ -9,6 +9,20 @@ namespace AShamanJourney
         {
         }
 
+        public override void Update()
+        {
+            base.Update();
+
+            UpdateTimers();
+        }
+
+        private void UpdateTimers()
+        {
+            GameManager.GlobalTimer += DeltaTime;
+            GameManager.LocalTimer += DeltaTime;
+            //((Hud)Engine.Objects["hud"]).UpdateTimer();
+        }
+
 
         public override void Start()
         {

@@ -32,7 +32,7 @@ namespace AShamanJourney
             };
             spawnChance = new List<float>()
             {
-                0.33f, 1f, 0.1f
+                0.2f, 1f, 0.1f
             };
             rndRanges = new List<float>();
         }
@@ -50,11 +50,17 @@ namespace AShamanJourney
 
             // details
             objectsSpawnRate.Add(new Dictionary<GameObject, float>());
-            var details0Asset = (SpriteAsset)Engine.GetAsset("tree0");
-            var details0 = new SpriteObject(details0Asset.Width/2, details0Asset.Height/2);
-            details0.CurrentSprite = details0Asset;
-            details0.Order = 2;
-            objectsSpawnRate[0][details0] = 1f;
+            var tree0Asset = (SpriteAsset)Engine.GetAsset("tree0");
+            var tree0 = new SpriteObject(tree0Asset.Width / 2, tree0Asset.Height / 2);
+            tree0.CurrentSprite = tree0Asset;
+            tree0.Order = 2;
+            objectsSpawnRate[0][tree0] = 1f;
+
+            var swamp0Asset = (SpriteAsset)Engine.GetAsset("swamp0");
+            var swamp0 = new SpriteObject(swamp0Asset.Width, swamp0Asset.Height);
+            swamp0.CurrentSprite = swamp0Asset;
+            swamp0.Order = 2;
+            objectsSpawnRate[0][swamp0] = 0.33f;
 
             // backgrounds
             objectsSpawnRate.Add(new Dictionary<GameObject, float>());
