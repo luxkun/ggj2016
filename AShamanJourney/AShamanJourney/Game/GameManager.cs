@@ -109,6 +109,10 @@ namespace AShamanJourney
             // enemies
             Utils.LoadAnimation(engine, "earthMinion", "earthMinion.png", 4, 4);
             engine.LoadAsset("earthMinionBullet", new SpriteAsset("singleBullet.png"));
+            //Utils.LoadAnimation(engine, "lifeMinion", "lifeMinion.png", 4, 4);
+            //engine.LoadAsset("lifeMinionBullet", new SpriteAsset("singleBullet.png"));
+            //Utils.LoadAnimation(engine, "demoniacMinion", "demoniacMinion.png", 4, 4);
+            //engine.LoadAsset("demoniacMinionBullet", new SpriteAsset("singleBullet.png"));
 
             Utils.LoadAnimation(engine, "ritual0", "ritual0.png", 5, 1);
             Utils.LoadAnimation(engine, "ritual1", "ritual1.png", 5, 1);
