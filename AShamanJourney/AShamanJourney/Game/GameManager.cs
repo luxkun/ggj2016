@@ -99,6 +99,7 @@ namespace AShamanJourney
             engine.LoadAsset("player", new SpriteAsset("player.png"));
             Utils.LoadAnimation(engine, "playerIdle", "playerIdle.png", 7, 1);
             Utils.LoadAnimation(engine, "playerMovingDown", "playerMovingDown.png", 4, 2);
+            Utils.LoadAnimation(engine, "playerShootingDown", "playerShootingDown.png",4,2);
 
             engine.LoadAsset("background0", new SpriteAsset("background0.png"));
             engine.LoadAsset("swamp0", new SpriteAsset("swamp0.png"));
