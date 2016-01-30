@@ -62,13 +62,13 @@ namespace AShamanJourney
             var tree0AssetTop = (SpriteAsset)Engine.GetAsset("tree0_top");
             var tree0AssetBottom = (SpriteAsset)Engine.GetAsset("tree0_bottom");
             var tree0 = new TruncatedObject("tree0", tree0AssetBottom, tree0AssetTop) {Order = 2};
-            objectsSpawnRate[0][tree0] = 1f;
+            objectsSpawnRate[0][tree0] = 2f;
 
             var ritualAsset = (SpriteAsset) Engine.GetAsset("ritual0_0_0");
             var ritual0 = new Ritual(ritualAsset.Width, ritualAsset.Height, Ritual.RitualType.Demoniac) {Order = 2};
             var ritual1 = new Ritual(ritualAsset.Width, ritualAsset.Height, Ritual.RitualType.Earth) {Order = 2};
             var ritual2 = new Ritual(ritualAsset.Width, ritualAsset.Height, Ritual.RitualType.Life) {Order = 2};
-            objectsSpawnRate[0][ritual0] = 10.1f;
+            objectsSpawnRate[0][ritual0] = 0.1f;
             objectsSpawnRate[0][ritual1] = 0.1f;
             objectsSpawnRate[0][ritual2] = 0.1f;
 
@@ -133,18 +133,6 @@ namespace AShamanJourney
             }
         }
 
-        private void SpawnBackground(int x, int y)
-        {
-            //if (x > oldCalculatedStart.X && x < oldCalculatedEnd.X &&
-            //    y > oldCalculatedStart.Y && y < oldCalculatedEnd.Y)
-            //    continue;
-            var obj = PickRandomObject(1);
-            obj.X = x;
-            obj.Y = y;
-            Engine.SpawnObject(obj);
-            Console.WriteLine(x + " " + y);
-        }
-
         private void UpdateWorld(Player player)
         {
             var oldCalculatedStart = calculatedStart;
@@ -159,79 +147,58 @@ namespace AShamanJourney
             // 1
             for (int x = (int)calculatedStart.X; x < calculatedEnd.X; x += (int)defaultBackground.Width)
                 for (int y = (int)calculatedStart.Y; y < oldCalculatedStart.Y; y += (int)defaultBackground.Height)
-                    SpawnBackground(x, y);
+                    PickRandomObject(x, y, 1);
             // 2
             for (int x = (int)oldCalculatedEnd.X; x < calculatedEnd.X; x += (int)defaultBackground.Width)
                 for (int y = (int)oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
-                    SpawnBackground(x, y);
+                    PickRandomObject(x, y, 1);
             // 3
             for (int x = (int)oldCalculatedStart.X; x < oldCalculatedEnd.X; x += (int)defaultBackground.Width)
                 for (int y = (int)oldCalculatedEnd.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
-                    SpawnBackground(x, y);
+                    PickRandomObject(x, y, 1);
             // 4
             for (int x = (int)calculatedStart.X; x < oldCalculatedStart.X; x += (int)defaultBackground.Width)
                 for (int y = (int)oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
-                    SpawnBackground(x, y);
+                    PickRandomObject(x, y, 1);
 
             // SPAWN ENEMIES
             // 1
             for (int x = (int)calculatedStart.X; x < calculatedEnd.X; x += (int)defaultBackground.Width)
                 for (int y = (int)calculatedStart.Y; y < oldCalculatedStart.Y; y += (int)defaultBackground.Height)
-                    SpawnEnemy(x, y);
+                    PickRandomObject(x, y, 2);
             // 2
             for (int x = (int)oldCalculatedEnd.X; x < calculatedEnd.X; x += (int)defaultBackground.Width)
                 for (int y = (int)oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
-                    SpawnEnemy(x, y);
+                    PickRandomObject(x, y, 2);
             // 3
             for (int x = (int)oldCalculatedStart.X; x < oldCalculatedEnd.X; x += (int)defaultBackground.Width)
                 for (int y = (int)oldCalculatedEnd.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
-                    SpawnEnemy(x, y);
+                    PickRandomObject(x, y, 2);
             // 4
             for (int x = (int)calculatedStart.X; x < oldCalculatedStart.X; x += (int)defaultBackground.Width)
                 for (int y = (int)oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
-                    SpawnEnemy(x, y);
+                    PickRandomObject(x, y, 2);
 
             // SPAWN RANDOM OBJECTS
             // 1
             for (int x = (int)calculatedStart.X; x < calculatedEnd.X; x += (int)defaultDetails.Width)
                 for (int y = (int)calculatedStart.Y; y < oldCalculatedStart.Y; y += (int)defaultDetails.Height)
-                    SpawnCollidable(x, y);
+                    PickRandomObject(x, y, 0);
             // 2
             for (int x = (int)oldCalculatedEnd.X; x < calculatedEnd.X; x += (int)defaultDetails.Width)
                 for (int y = (int)oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultDetails.Height)
-                    SpawnCollidable(x, y);
+                    PickRandomObject(x, y, 0);
             // 3
             for (int x = (int)oldCalculatedStart.X; x < oldCalculatedEnd.X; x += (int)defaultDetails.Width)
                 for (int y = (int)oldCalculatedEnd.Y; y < calculatedEnd.Y; y += (int)defaultDetails.Height)
-                    SpawnCollidable(x, y);
+                    PickRandomObject(x, y, 0);
             // 4
             for (int x = (int)calculatedStart.X; x < oldCalculatedStart.X; x += (int)defaultDetails.Width)
                 for (int y = (int)oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultDetails.Height)
-                    SpawnCollidable(x, y);
+                    PickRandomObject(x, y, 0);
         }
 
-        private void SpawnEnemy(int x, int y)
-        {
-            var obj = PickRandomObject(2);
-            if (obj == null)
-                return;
-            obj.X = x;
-            obj.Y = y;
-            Engine.SpawnObject(obj);
-        }
-
-        private void SpawnCollidable(int x, int y)
-        {
-            var obj = PickRandomObject(0);
-            if (obj == null)
-                return;
-            obj.X = x;
-            obj.Y = y;
-            //obj.Rotation = (float)(Math.PI * 2 * GameManager.Random.NextDouble());
-            Engine.SpawnObject(obj);
-        }
-
-        private GameObject PickRandomObject(int type)
+        private GameObject PickRandomObject(int x, int y, int type)
         {
             if (spawnChance[type] < 1f && GameManager.Random.NextDouble() > spawnChance[type])
                 return null;
@@ -250,6 +217,14 @@ namespace AShamanJourney
             result.Name += Utils.RandomString(10); // TODO: calculate this
             //result.Xp = result.LevelManager.levelUpTable[level].NeededXp;
             //result.LevelCheck();
+            result.X = x;
+            result.Y = y;
+            Engine.SpawnObject(result);
+            if (result.HasCollisions())
+            {
+                result.Destroy();
+                return null;
+            }
             SpawnedObjects[type].Add(result);
             return result;
         }
