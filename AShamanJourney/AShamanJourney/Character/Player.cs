@@ -53,6 +53,7 @@ namespace AShamanJourney
         {
             base.Update();
             ManageInput();
+            ManageCollisions();
         }
 
         private void ManageInput()
@@ -97,12 +98,6 @@ namespace AShamanJourney
                 movingDirection.Normalize();
                 X += movingDirection.X * DeltaTime * Stats.Speed;
                 Y += movingDirection.Y * DeltaTime * Stats.Speed;
-                if (ManageCollisions())
-                {
-                    movingDirection = Vector2.Zero;
-                    X = lastPosition.X;
-                    Y = lastPosition.Y;
-                }
                 CalculateMovingState(movingDirection);
             }
             else
@@ -117,6 +112,12 @@ namespace AShamanJourney
             foreach (var collision in CheckCollisions())
             {
                 collided = true;
+            }
+            if (collided)
+            {
+                X = lastPosition.X;
+                Y = lastPosition.Y;
+                CalculateMovingState(Vector2.Zero);
             }
             return collided;
         }
