@@ -10,7 +10,7 @@ namespace AShamanJourney
         private float healModifier = 0.66f;
         private SpriteAsset bulletAsset;
         private int bulletCounter;
-        private float minimumDiff = 100f;
+        private float minimumDiff = 200f;
         private float speedModifier = 0.66f;
 
         public enum MinionType
@@ -22,7 +22,7 @@ namespace AShamanJourney
             this.minionType = minionType;
             AutomaticHitBox = false;
 
-            minimumDiff = (float) (0.5f + GameManager.Random.NextDouble()*minimumDiff);
+            minimumDiff = (float) ((0.66 + GameManager.Random.NextDouble())*minimumDiff);
         }
 
         public override void Start()
@@ -45,6 +45,7 @@ namespace AShamanJourney
                     AddAnimation("movingUp", Utils.GetAssetName("earthMinion", 0, 3, 4), 4);
                     break;
             }
+            CurrentAnimation = "idle";
         }
 
         public Player Player { get; set; }
@@ -69,12 +70,15 @@ namespace AShamanJourney
 
         private void FollowPlayer()
         {
-            var direction = new Vector2(Player.X, Player.Y) - new Vector2(X, Y);
-            if (direction.LengthFast < minimumDiff)
+            var direction = Player.GetHitCenter() - new Vector2(X, Y);
+            if (direction.LengthFast < minimumDiff) { 
+                movingState = MovingState.Idle;
                 return;
+            }
             direction.Normalize();
             X += direction.X * DeltaTime * Stats.Speed * speedModifier;
             Y += direction.Y * DeltaTime * Stats.Speed * speedModifier;
+            CalculateMovingState(direction);
         }
 
         private void AggressiveWorker()
@@ -83,9 +87,9 @@ namespace AShamanJourney
                 var myPos = new Vector2(X, Y);
                 foreach (var enemy in World.SpawnedObjects[2])
                 {
-                    var pos = new Vector2(enemy.X, enemy.Y);
-                    if ((pos - myPos).LengthFast < RangeRadius) { 
-                        Shot(pos.Normalized());
+                    var diff = new Vector2(enemy.X, enemy.Y) - myPos;
+                    if (diff.LengthFast < RangeRadius) { 
+                        Shot(diff.Normalized());
                         break;
                     }
                 }
@@ -96,7 +100,10 @@ namespace AShamanJourney
         {
             Timer.Set("shotTimer", Stats.AttackSpeed);
             var bullet = new Bullet(
-                this, bulletAsset, direction, (Collision collision) => !(collision.Other is Player));
+                this, bulletAsset, direction, collision => !(collision.Other is Player))
+            {
+                X = X, Y = Y, Scale = new Vector2(0.33f, 0.33f)
+            };
             Engine.SpawnObject($"{Name}_bullet{bulletCounter}", bullet);
         }
 

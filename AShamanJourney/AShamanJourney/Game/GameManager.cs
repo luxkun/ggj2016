@@ -97,6 +97,9 @@ namespace AShamanJourney
             engine.LoadAsset("bear", new SpriteAsset("bear.png"));
 
             engine.LoadAsset("player", new SpriteAsset("player.png"));
+            Utils.LoadAnimation(engine, "playerIdle", "playerIdle.png", 7, 1);
+            Utils.LoadAnimation(engine, "playerMovingDown", "playerMovingDown.png", 4, 2);
+
             engine.LoadAsset("background0", new SpriteAsset("background0.png"));
             engine.LoadAsset("swamp0", new SpriteAsset("swamp0.png"));
             var tree = new SpriteAsset("tree0.png");
@@ -126,7 +129,7 @@ namespace AShamanJourney
             var cameraManager = new GameObject();
             cameraManager.OnUpdate += sender =>
             {
-                var cameraX = player.X - player.Width/2 - engine.Width/2;
+                var cameraX = player.X - player.Width / 2 - engine.Width/2;
                 var cameraY = player.Y - player.Height / 2 - engine.Height/2;
                 engine.Camera.X = cameraX;
                 engine.Camera.Y = cameraY;

@@ -23,7 +23,7 @@ namespace AShamanJourney
         {
             Stats.Hp = 100f;
             Stats.MaxHp = 100f;
-            Stats.Speed = 500f;
+            Stats.Speed = 250f;
             Stats.Attack = 100f;
             Stats.AttackSpeed = 0.8f;
             Stats.XpForNextLevel = 100;
@@ -47,8 +47,11 @@ namespace AShamanJourney
 
         private void LoadAnimations()
         {
-            // TODO: add animations
-            CurrentSprite = (SpriteAsset) Engine.GetAsset("player");
+            AddAnimation("idle", Utils.GetAssetName("playerIdle", 0, 0, 7), 8);
+            AddAnimation("movingLeft", Utils.GetAssetName("playerIdle", 0, 0, 7), 15);
+            AddAnimation("movingRight", Utils.GetAssetName("playerIdle", 0, 0, 7), 15);
+            AddAnimation("movingDown", Utils.GetAssetName("playerMovingDown", 0, 0, 4, 2), 15);
+            AddAnimation("movingUp", Utils.GetAssetName("playerIdle", 0, 0, 7), 15);
         }
 
         public override void Update()

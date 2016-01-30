@@ -42,8 +42,8 @@ namespace AShamanJourney
             base.Start();
             Engine.TimeModifier = 0f;
 
-            speed = 160f + GameManager.GlobalTimer/60f;
-            KeyPadding = 300f - GameManager.GlobalTimer / 60f * 3f;
+            speed = 250f + GameManager.GlobalTimer/60f;
+            KeyPadding = 250f - GameManager.GlobalTimer / 60f * 3f;
 
             QteLogo0 = new TextObject(3f, Color.Crimson)
             {
@@ -106,7 +106,7 @@ namespace AShamanJourney
 
         public float Padding { get; set; } = 15f;
 
-        public float FontSize { get; set; } = 0.66f;
+        public float FontSize { get; set; } = 0.6f;
 
         public static KeyCode[] KeyCodeForQte { get; } = {
             KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D, KeyCode.Up, KeyCode.Right, KeyCode.Down, KeyCode.Left
