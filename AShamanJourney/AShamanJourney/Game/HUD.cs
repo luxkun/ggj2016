@@ -164,9 +164,9 @@ namespace AShamanJourney
             timer.Text = $"Timer {(int)GameManager.LocalTimer} - {(int)GameManager.GlobalTimer}";
         }
 
-        public void NextWave()
+        public void UpdateWave()
         {
-
+            wave.Text = $"Wave: {GameManager.Wave} - Next Wave: {((Game)Engine.Objects["game"]).Timer.Get("nextWave")}";
         }
     }
 }
