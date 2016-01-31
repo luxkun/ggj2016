@@ -120,8 +120,10 @@ namespace AShamanJourney
             Utils.LoadAnimation(engine, "ritual2", "ritual2.png", 5, 1);
             engine.LoadAsset("qteContainer", new SpriteAsset("QteContainer.png"));
 
-            // bear
+            // animals (enemies)
             Utils.LoadAnimation(engine, "bear", "bear.png", 3, 4);
+            Utils.LoadAnimation(engine, "wolf", "wolf.png", 3, 4);
+            Utils.LoadAnimation(engine, "rhyno", "rhyno.png", 3, 4);
         }
 
         public static void Run()
