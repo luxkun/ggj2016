@@ -13,7 +13,7 @@ namespace AShamanJourney
         }
 
         private readonly float attackModifier = 0.66f;
-        private readonly float healModifier = 0.66f;
+        private readonly float healModifier = 1.8f;
         private readonly float minimumDiff = 200f;
         private readonly MinionType minionType;
         private readonly float speedModifier = 0.66f;
@@ -136,7 +136,7 @@ namespace AShamanJourney
             {
                 if (Player.Stats.Hp < Player.Stats.MaxHp)
                 {
-                    Timer.Set("healTimer", Stats.AttackSpeed);
+                    Timer.Set("healTimer", Stats.AttackSpeed*3);
                     Player.Stats.Hp += Stats.Attack*healModifier;
                     AudioSource.Volume = 1f;
                     AudioSource.Play(((AudioAsset) Engine.GetAsset("sound_heal")).Clip);

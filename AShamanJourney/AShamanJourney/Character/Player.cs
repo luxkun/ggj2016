@@ -154,6 +154,16 @@ namespace AShamanJourney
             }
         }
 
+        public override void HpChanged()
+        {
+            if (Stats.Hp <= 0)
+            {
+                var gameOver = new GameOver();
+                Engine.SpawnObject("gameOver", gameOver);
+            } else 
+                base.HpChanged();
+        }
+
         private bool ManageCollisions()
         {
             var collided = false;

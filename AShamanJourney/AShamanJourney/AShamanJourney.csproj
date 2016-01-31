@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{AAECF69E-CACE-479B-9AEC-0F8182F71989}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AShamanJourney</RootNamespace>
     <AssemblyName>AShamanJourney</AssemblyName>
@@ -32,6 +32,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="aiv-fast2d">
@@ -69,9 +72,9 @@
     <None Include="assets\sound\ritual_intro.ogg" />
     <None Include="assets\sound\ritual_soundtrack.ogg" />
     <None Include="assets\sound\soundtrack.ogg" />
-    <None Include="Character\Enemy - Copy.cs" />
     <Compile Include="Character\Enemy.cs" />
     <Compile Include="Character\EnemyInfo.cs" />
+    <Compile Include="Game\GameOver.cs" />
     <Compile Include="Game\CameraManager.cs" />
     <Compile Include="Game\Hud.cs" />
     <Compile Include="Game\PreGame.cs" />
@@ -92,6 +95,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="bin\Debug\AShamanJourney.exe.config" />
+    <None Include="bin\Debug\AShamanJourney.vshost.exe.config" />
+    <None Include="bin\Debug\AShamanJourney.vshost.exe.manifest" />
+    <None Include="bin\Release\AShamanJourney.exe.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -119,6 +126,31 @@
     <Content Include="assets\swamp0.png" />
     <Content Include="assets\tree0.png" />
     <Content Include="assets\wolf.png" />
+    <Content Include="bin\Debug\aiv-fast2d.dll" />
+    <Content Include="bin\Debug\aiv-fast2d.pdb" />
+    <Content Include="bin\Debug\aiv-vorbis.dll" />
+    <Content Include="bin\Debug\aivengine.dll" />
+    <Content Include="bin\Debug\aivengine.pdb" />
+    <Content Include="bin\Debug\AShamanJourney.exe" />
+    <Content Include="bin\Debug\AShamanJourney.pdb" />
+    <Content Include="bin\Debug\AShamanJourney.vshost.exe" />
+    <Content Include="bin\Debug\NVorbis.dll" />
+    <Content Include="bin\Debug\NVorbis.xml" />
+    <Content Include="bin\Debug\openal32.dll" />
+    <Content Include="bin\Debug\OpenTK.dll" />
+    <Content Include="bin\Debug\OpenTK.xml" />
+    <Content Include="bin\Release\aiv-fast2d.dll" />
+    <Content Include="bin\Release\aiv-fast2d.pdb" />
+    <Content Include="bin\Release\aiv-vorbis.dll" />
+    <Content Include="bin\Release\aivengine.dll" />
+    <Content Include="bin\Release\aivengine.pdb" />
+    <Content Include="bin\Release\AShamanJourney.exe" />
+    <Content Include="bin\Release\AShamanJourney.pdb" />
+    <Content Include="bin\Release\NVorbis.dll" />
+    <Content Include="bin\Release\NVorbis.xml" />
+    <Content Include="bin\Release\openal32.dll" />
+    <Content Include="bin\Release\OpenTK.dll" />
+    <Content Include="bin\Release\OpenTK.xml" />
     <Content Include="openal32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

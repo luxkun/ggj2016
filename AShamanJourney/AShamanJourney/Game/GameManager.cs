@@ -20,7 +20,7 @@ namespace AShamanJourney
         //static GameManager()
         public static void Initialize()
         {
-            engine = new Engine("A Shaman's Journey", 1280, 720, 60, true);
+            engine = new Engine("A Shaman's Journey", 1280, 720, 60, false);
 #if DEBUG
             engine.debugCollisions = true;
 #endif
@@ -138,6 +138,10 @@ namespace AShamanJourney
 
             // pregame
             engine.LoadAsset("logo", new SpriteAsset("preGame.png"));
+
+            // pause
+            engine.LoadAsset("pauseImage", new SpriteAsset("pauseImage.png"));
+
         }
 
         public static void Run()
@@ -155,7 +159,7 @@ namespace AShamanJourney
             engine.SpawnObject("preGame", preGame);
         }
 
-        private static void StartGame()
+        public static void StartGame()
         {
             var hud = new Hud();
             engine.SpawnObject("hud", hud);

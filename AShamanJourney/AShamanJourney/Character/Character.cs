@@ -139,7 +139,7 @@ namespace AShamanJourney
         {
         }
 
-        internal void HpChanged()
+        public virtual void HpChanged()
         {
             OnHpChanged?.Invoke(this);
             Debug.WriteLine($"{Name} hp changed to {Stats.Hp}");

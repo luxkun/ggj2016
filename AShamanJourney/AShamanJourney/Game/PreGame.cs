@@ -14,6 +14,7 @@ namespace AShamanJourney
         private void DestroyEvent(object sender)
         {
             logo.Destroy();
+            GameManager.StartGame();
         }
 
         public override void Start()

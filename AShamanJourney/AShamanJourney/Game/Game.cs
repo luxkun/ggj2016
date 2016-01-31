@@ -36,12 +36,20 @@ namespace AShamanJourney
             GameManager.MainWindow = "game";
             AudioSource.Resume();
             Engine.TimeModifier = 1f;
+            ((SpriteObject)Engine.Objects["pause"]).Destroy();
         }
 
         private void Pause()
         {
             GameManager.MainWindow = "pause";
             AudioSource.Pause();
+            var pauseImage = new SpriteObject(Engine.Width, Engine.Height)
+            {
+                Order = 20,
+                CurrentSprite = (SpriteAsset) Engine.GetAsset("pauseImage"),
+                IgnoreCamera = true
+            };
+            Engine.SpawnObject("pause", pauseImage);
             Engine.TimeModifier = 0f;
         }
 

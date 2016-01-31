@@ -32,7 +32,7 @@ namespace AShamanJourney
             };
             spawnChance = new List<float>
             {
-                0.3f,
+                0.33f,
                 1f,
                 1f
             };
@@ -52,14 +52,6 @@ namespace AShamanJourney
 
             // details
             objectsSpawnRate.Add(new Dictionary<SpriteObject, float>());
-            var swamp0Asset = (SpriteAsset) Engine.GetAsset("swamp0");
-            var swamp0 = new SpriteObject(swamp0Asset.Width, swamp0Asset.Height, true)
-            {
-                Name = "swamp0",
-                CurrentSprite = swamp0Asset,
-                Order = 2
-            };
-            objectsSpawnRate[0][swamp0] = 0.1f;
 
             var tree0AssetTop = (SpriteAsset) Engine.GetAsset("tree0_top");
             var tree0AssetBottom = (SpriteAsset) Engine.GetAsset("tree0_bottom");
@@ -71,8 +63,17 @@ namespace AShamanJourney
             var ritual1 = new Ritual(ritualAsset.Width, ritualAsset.Height, Ritual.RitualType.Earth) {Order = 2};
             var ritual2 = new Ritual(ritualAsset.Width, ritualAsset.Height, Ritual.RitualType.Life) {Order = 2};
             objectsSpawnRate[0][ritual0] = 0.1f;
-            objectsSpawnRate[0][ritual2] = 0.13f;
             objectsSpawnRate[0][ritual1] = 0.1f;
+            objectsSpawnRate[0][ritual2] = 0.1f;
+
+            var swamp0Asset = (SpriteAsset)Engine.GetAsset("swamp0");
+            var swamp0 = new SpriteObject(swamp0Asset.Width, swamp0Asset.Height, true)
+            {
+                Name = "swamp0",
+                CurrentSprite = swamp0Asset,
+                Order = 2
+            };
+            objectsSpawnRate[0][swamp0] = 0.1f;
 
             // backgrounds
             objectsSpawnRate.Add(new Dictionary<SpriteObject, float>());
@@ -223,7 +224,7 @@ namespace AShamanJourney
 
             //Debug.WriteLine($"Random object: {srange} to {range}, {rndRanges[roomType]} => {enemyInfo.CharacterName}");
             var result = (SpriteObject) objectInfo.Clone();
-            result.Name += Utils.RandomString(10); // TODO: calculate this
+            result.Name += Utils.RandomString(12); // TODO: calculate this
             //result.Xp = result.LevelManager.levelUpTable[level].NeededXp;
             //result.LevelCheck();
             result.X = x;
