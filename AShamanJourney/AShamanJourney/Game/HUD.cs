@@ -20,6 +20,7 @@ namespace AShamanJourney
         private TextObject timer;
         private TextObject hpNumber;
         private TextObject xpNumber;
+        private TextObject wave;
 
         private RectangleObject hpBar;
         private RectangleObject xpBar;
@@ -38,6 +39,8 @@ namespace AShamanJourney
             lvl = new TextObject(fontSize, Color.ForestGreen);
             lvl.Order = 10;
             timer = new TextObject(fontSize, Color.BurlyWood);
+            timer.Order = 10;
+            wave = new TextObject(fontSize, Color.BlanchedAlmond);
             timer.Order = 10;
             hpNumber = new TextObject(fontSize / 2, Color.DarkGray);
             hpNumber.Order = 11;
@@ -71,6 +74,14 @@ namespace AShamanJourney
             xp.IgnoreCamera = true;
             xp.Text = "XP";
             var xpMeasure = xp.Measure();
+
+            //WAVE
+            Engine.SpawnObject("wave", wave);
+            wave.IgnoreCamera = true;
+            wave.X = Engine.Width - (wave.Measure().X + InnerPadding);
+            wave.Y = Padding;
+            wave.Text = $"Wave 0";
+            //
 
             hpBar = new RectangleObject(150, (int)hpMeasure.Y)
             {
@@ -147,9 +158,15 @@ namespace AShamanJourney
             xpNumber.Y = xpBarBorder.Y + (xpBarBorder.Height / 2) - (xpNumberMeasure.Y / 2);
             lvl.Text = $"Level {player.Stats.Level + 1}";
         }
+
         public void UpdateTimer()
         {
             timer.Text = $"Timer {(int)GameManager.LocalTimer} - {(int)GameManager.GlobalTimer}";
+        }
+
+        public void NextWave()
+        {
+
         }
     }
 }
