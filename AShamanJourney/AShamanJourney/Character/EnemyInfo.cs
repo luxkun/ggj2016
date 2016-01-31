@@ -11,7 +11,7 @@ namespace AShamanJourney
     {
         public static Enemy bear;
         public static Enemy wolf;
-        public static Enemy boar;
+        public static Enemy rhyno;
 
         private static readonly Dictionary<string, float> LevelUpModifiers = new Dictionary<string, float>()
         {
@@ -50,7 +50,7 @@ namespace AShamanJourney
                 RangeRadius = 1000f
             };
 
-            boar = new Enemy("boar", 60, 30, LevelUpModifiers)
+            rhyno = new Enemy("boar", 60, 30, LevelUpModifiers)
             {
                 Stats =
                 {
@@ -74,6 +74,18 @@ namespace AShamanJourney
             bear.AddAnimation("movingRight", Utils.GetAssetName("bear", 0, 2, 3), 5, engine);
             bear.AddAnimation("movingUp", Utils.GetAssetName("bear", 0, 3, 3), 5, engine);
             bear.AddAnimation("movingDown", Utils.GetAssetName("bear", 0, 0, 3), 5, engine);
+
+            wolf.AddAnimation("idle", Utils.GetAssetName("wolf", 0, 0), 5, engine);
+            wolf.AddAnimation("movingLeft", Utils.GetAssetName("wolf", 0, 1, 3), 5, engine);
+            wolf.AddAnimation("movingRight", Utils.GetAssetName("wolf", 0, 2, 3), 5, engine);
+            wolf.AddAnimation("movingUp", Utils.GetAssetName("wolf", 0, 3, 3), 5, engine);
+            wolf.AddAnimation("movingDown", Utils.GetAssetName("wolf", 0, 0, 3), 5, engine);
+
+            rhyno.AddAnimation("idle", Utils.GetAssetName("rhyno", 0, 0), 5, engine);
+            rhyno.AddAnimation("movingLeft", Utils.GetAssetName("rhyno", 0, 1, 3), 5, engine);
+            rhyno.AddAnimation("movingRight", Utils.GetAssetName("rhyno", 0, 2, 3), 5, engine);
+            rhyno.AddAnimation("movingUp", Utils.GetAssetName("rhyno", 0, 3, 3), 5, engine);
+            rhyno.AddAnimation("movingDown", Utils.GetAssetName("rhyno", 0, 0, 3), 5, engine);
         }
     }
 }
