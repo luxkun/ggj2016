@@ -37,14 +37,28 @@ namespace AShamanJourney
             switch (minionType)
             { // TODO: different for each type
                 case MinionType.Demoniac:
+                    //bulletAsset = (SpriteAsset)Engine.GetAsset("demoniacMinionBullet");
+                    //AddAnimation("idle", Utils.GetAssetName("demoniacMinion", 0, 0), 1);
+                    //AddAnimation("movingDown", Utils.GetAssetName("demoniacMinion", 0, 0, 4), 8);
+                    //AddAnimation("movingLeft", Utils.GetAssetName("demoniacMinion", 0, 1, 4), 8);
+                    //AddAnimation("movingRight", Utils.GetAssetName("demoniacMinion", 0, 2, 4), 8);
+                    //AddAnimation("movingUp", Utils.GetAssetName("demoniacMinion", 0, 3, 4), 8);
+                    //break;
                 case MinionType.Earth:
-                case MinionType.Life:
-                    bulletAsset = (SpriteAsset) Engine.GetAsset("earthMinionBullet");
+                    bulletAsset = (SpriteAsset)Engine.GetAsset("earthMinionBullet");
                     AddAnimation("idle", Utils.GetAssetName("earthMinion", 0, 0), 1);
                     AddAnimation("movingDown", Utils.GetAssetName("earthMinion", 0, 0, 4), 8);
                     AddAnimation("movingLeft", Utils.GetAssetName("earthMinion", 0, 1, 4), 8);
                     AddAnimation("movingRight", Utils.GetAssetName("earthMinion", 0, 2, 4), 8);
                     AddAnimation("movingUp", Utils.GetAssetName("earthMinion", 0, 3, 4), 8);
+                    break;
+                case MinionType.Life:
+                    //bulletAsset = (SpriteAsset) Engine.GetAsset("lifeMinionBullet");
+                    //AddAnimation("idle", Utils.GetAssetName("lifeMinion", 0, 0), 1);
+                    //AddAnimation("movingDown", Utils.GetAssetName("lifeMinion", 0, 0, 4), 8);
+                    //AddAnimation("movingLeft", Utils.GetAssetName("lifeMinion", 0, 1, 4), 8);
+                    //AddAnimation("movingRight", Utils.GetAssetName("lifeMinion", 0, 2, 4), 8);
+                    //AddAnimation("movingUp", Utils.GetAssetName("lifeMinion", 0, 3, 4), 8);
                     break;
             }
             CurrentAnimation = "idle";
