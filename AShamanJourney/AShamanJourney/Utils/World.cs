@@ -32,7 +32,7 @@ namespace AShamanJourney
             };
             spawnChance = new List<float>
             {
-                0.33f,
+                0.25f,
                 1f,
                 1f
             };
@@ -56,15 +56,15 @@ namespace AShamanJourney
             var tree0AssetTop = (SpriteAsset) Engine.GetAsset("tree0_top");
             var tree0AssetBottom = (SpriteAsset) Engine.GetAsset("tree0_bottom");
             var tree0 = new TruncatedObject("tree0", tree0AssetBottom, tree0AssetTop) {Order = 2};
-            objectsSpawnRate[0][tree0] = 5f;
+            objectsSpawnRate[0][tree0] = 2f;
 
             var ritualAsset = (SpriteAsset) Engine.GetAsset("ritual0_0_0");
             var ritual0 = new Ritual(ritualAsset.Width, ritualAsset.Height, Ritual.RitualType.Demoniac) {Order = 2};
             var ritual1 = new Ritual(ritualAsset.Width, ritualAsset.Height, Ritual.RitualType.Earth) {Order = 2};
             var ritual2 = new Ritual(ritualAsset.Width, ritualAsset.Height, Ritual.RitualType.Life) {Order = 2};
-            objectsSpawnRate[0][ritual0] = 0.1f;
-            objectsSpawnRate[0][ritual1] = 0.1f;
-            objectsSpawnRate[0][ritual2] = 0.1f;
+            objectsSpawnRate[0][ritual0] = 0.066f;
+            objectsSpawnRate[0][ritual1] = 0.066f;
+            objectsSpawnRate[0][ritual2] = 0.066f;
 
             var swamp0Asset = (SpriteAsset)Engine.GetAsset("swamp0");
             var swamp0 = new SpriteObject(swamp0Asset.Width, swamp0Asset.Height, true)

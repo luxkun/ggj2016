@@ -19,7 +19,8 @@ namespace AShamanJourney
             bottomSprite.CurrentSprite = bottomSpriteAsset;
             bottomSprite.Order = 1;
             AddHitBox(
-                "bottomtree", 0, (int) topSprite.Height, (int) bottomSprite.Width,
+                "bottomtree", (int) (bottomSprite.Width*0.33f),
+                (int) topSprite.Height, (int) (bottomSprite.Width*0.33f),
                 (int) bottomSprite.Height);
             this.bottomSpriteAsset = bottomSpriteAsset;
             this.topSpriteAsset = topSpriteAsset;

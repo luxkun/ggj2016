@@ -110,8 +110,8 @@ namespace AShamanJourney
             engine.LoadAsset("background0", new SpriteAsset("background0.png"));
             engine.LoadAsset("swamp0", new SpriteAsset("swamp0.png"));
             var tree = new SpriteAsset("tree0.png");
-            engine.LoadAsset("tree0_top", new SpriteAsset("tree0.png", 0, 0, tree.Width, tree.Height/2));
-            engine.LoadAsset("tree0_bottom", new SpriteAsset("tree0.png", 0, tree.Height/2, tree.Width, tree.Height/2));
+            engine.LoadAsset("tree0_top", new SpriteAsset("tree0.png", 0, 0, tree.Width, (int) (tree.Height*0.75f)));
+            engine.LoadAsset("tree0_bottom", new SpriteAsset("tree0.png", 0, (int)(tree.Height * 0.75f), tree.Width, (int)(tree.Height * 0.25f)));
 
             // enemies
             Utils.LoadAnimation(engine, "earthMinion", "earthMinion.png", 4, 4);
