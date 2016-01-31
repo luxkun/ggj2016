@@ -34,14 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="aiv-fast2d, Version=1.0.5866.38605, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\aivengine-1\aivengine\bin\Debug\aiv-fast2d.dll</HintPath>
+    <Reference Include="aiv-fast2d">
+      <HintPath>..\..\..\aiv-fast2d\aiv-fast2d\bin\Debug\aiv-fast2d.dll</HintPath>
     </Reference>
-    <Reference Include="aiv-vorbis, Version=1.0.5864.22892, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\aivengine-1\aivengine\bin\Debug\aiv-vorbis.dll</HintPath>
-    </Reference>
+    <Reference Include="aiv-vorbis, Version=1.0.5864.22892, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="aivengine">
       <HintPath>..\..\..\aivengine-1\aivengine\bin\Debug\aivengine.dll</HintPath>
     </Reference>
@@ -67,11 +63,18 @@
     <Compile Include="Character\Character.cs" />
     <Compile Include="Character\Damage.cs" />
     <Compile Include="Character\DropManager.cs" />
+    <None Include="assets\sound\bullet.ogg" />
+    <None Include="assets\sound\damage.ogg" />
+    <None Include="assets\sound\heal.ogg" />
+    <None Include="assets\sound\ritual_intro.ogg" />
+    <None Include="assets\sound\ritual_soundtrack.ogg" />
+    <None Include="assets\sound\soundtrack.ogg" />
     <None Include="Character\Enemy - Copy.cs" />
     <Compile Include="Character\Enemy.cs" />
     <Compile Include="Character\EnemyInfo.cs" />
     <Compile Include="Game\CameraManager.cs" />
     <Compile Include="Game\Hud.cs" />
+    <Compile Include="Game\PreGame.cs" />
     <Compile Include="Ritual\Bullet.cs" />
     <Compile Include="Ritual\Minion.cs" />
     <Compile Include="Ritual\QuickTimeEvent.cs" />
@@ -96,6 +99,7 @@
     <Content Include="assets\background0.png" />
     <Content Include="assets\bear.png" />
     <Content Include="assets\demoniacMinion.png" />
+    <Content Include="assets\earthMinion.png" />
     <Content Include="assets\lifeMinion.png" />
     <Content Include="assets\player.png" />
     <Content Include="assets\player\idle.png" />
@@ -105,8 +109,16 @@
     <Content Include="assets\player\movingUp.png" />
     <Content Include="assets\player\shottingDown.png" />
     <Content Include="assets\player\shottingUp.png" />
+    <Content Include="assets\QteContainer.png" />
+    <Content Include="assets\rhyno.png" />
+    <Content Include="assets\ritual0.png" />
+    <Content Include="assets\ritual1.png" />
+    <Content Include="assets\ritual2.png" />
+    <Content Include="assets\SHAMAN.fw.png" />
+    <Content Include="assets\singleBullet.png" />
     <Content Include="assets\swamp0.png" />
     <Content Include="assets\tree0.png" />
+    <Content Include="assets\wolf.png" />
     <Content Include="openal32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

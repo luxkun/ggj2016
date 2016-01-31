@@ -1,8 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
+﻿using System.Collections.Generic;
 using Aiv.Engine;
 using Aiv.Fast2D;
 using OpenTK;
@@ -11,19 +7,21 @@ namespace AShamanJourney
 {
     public class Player : Character
     {
-        private Vector2 lastPosition;
-
-        public static readonly Dictionary<string, float> LevelUpModifiers = new Dictionary<string, float>()
+        public static readonly Dictionary<string, float> LevelUpModifiers = new Dictionary<string, float>
         {
-            { "attack", 1.1f }, { "maxHp", 1.1f }, { "xpReward", 1.1f },
-            { "speed", 1.1f }, { "xpForNextLevel", 1.2f }, { "attackSpeed", 1.1f }
+            {"attack", 1.1f},
+            {"maxHp", 1.1f},
+            {"xpReward", 1.1f},
+            {"speed", 1.1f},
+            {"xpForNextLevel", 1.2f},
+            {"attackSpeed", 1.1f}
         };
 
         private readonly int maxCollisions = 10;
+        private Vector2 lastPosition;
 
         public Player(string name, int width, int height) : base(name, width, height, LevelUpModifiers)
         {
-            Stats.Hp = 500f;
             Stats.MaxHp = 500f;
             Stats.Speed = 250f;
             Stats.Attack = 40f;
@@ -35,21 +33,23 @@ namespace AShamanJourney
             bulletHitMask = (Collision collision) => !(collision.Other is Player);
         }
 
+        public int InCollision { get; set; }
+
         public override void Start()
         {
             base.Start();
             LoadAnimations();
 
+            // sorry again
+            Timer.Set("FUCKTHESYSTEM", 0.5f);
+
             var hud = (Hud) Engine.Objects["hud"];
-            OnHpChanged += sender =>
-            {
-                hud.UpdateHp((Player) sender);
-            };
+            OnHpChanged += sender => { hud.UpdateHp((Player) sender); };
             OnXpChanged += (sender, delta) => hud.UpdateXp((Player) sender);
             hud.UpdateHp(this);
             hud.UpdateXp(this);
 
-            bulletAsset = (SpriteAsset)Engine.GetAsset("genericBullet");
+            bulletAsset = (SpriteAsset) Engine.GetAsset("genericBullet");
         }
 
         private void LoadAnimations()
@@ -130,8 +130,8 @@ namespace AShamanJourney
             if (movingDirection.LengthFast > 0.2f)
             {
                 movingDirection.Normalize();
-                X += movingDirection.X * DeltaTime * Stats.Speed;
-                Y += movingDirection.Y * DeltaTime * Stats.Speed;
+                X += movingDirection.X*DeltaTime*Stats.Speed;
+                Y += movingDirection.Y*DeltaTime*Stats.Speed;
                 CalculateMovingState(movingDirection);
             }
             else
@@ -156,11 +156,16 @@ namespace AShamanJourney
 
         private bool ManageCollisions()
         {
-            bool collided = false;
+            var collided = false;
             foreach (var collision in CheckCollisions())
             {
-                if (!(collision.Other is Ritual) && !(collision.Other is Enemy))// && InCollision > maxCollisions)
+                if (!(collision.Other is Ritual) && !(collision.Other is Enemy))
+                {
+// && InCollision > maxCollisions)
                     collided = true;
+                    if (Timer.Get("FUCKTHESYSTEM") > 0)
+                        collision.Other.Destroy();
+                }
             }
             var world = (World) Engine.Objects["world"];
             if (collided ||
@@ -178,7 +183,5 @@ namespace AShamanJourney
             }
             return collided;
         }
-
-        public int InCollision { get; set; }
     }
 }

@@ -9,10 +9,6 @@ namespace AShamanJourney
 {
     public class Character : SpriteObject
     {
-        protected Func<Collision, bool> bulletHitMask = collision => true;
-        protected SpriteAsset bulletAsset;
-        private int bulletCounter = 0;
-
         public delegate void DamageTakenEventHandler(object sender, float delta);
 
         public delegate void HpChangedEventHandler(object sender);
@@ -31,6 +27,10 @@ namespace AShamanJourney
             MovingUp = 5
         }
 
+        protected SpriteAsset bulletAsset;
+        private readonly int bulletCounter = 0;
+        protected Func<Collision, bool> bulletHitMask = collision => true;
+
         public Character(string name, int width, int height, Dictionary<string, float> levelUpModifiers)
             : base(width, height, true)
         {
@@ -41,7 +41,6 @@ namespace AShamanJourney
             DropManager = new DropManager(this);
 
             Stats = new Stats(this, levelUpModifiers);
-            Stats.Hp = 1f;
 
             OnDestroy += DestroyEvent;
         }
@@ -88,6 +87,8 @@ namespace AShamanJourney
         {
             base.Start();
 
+            Stats.Hp = Stats.MaxHp;
+
             LevelCheck();
             movingState = MovingState.Inactive;
             if (Animations != null)
@@ -120,8 +121,8 @@ namespace AShamanJourney
                 {
                     Scale = new Vector2(0.33f, 0.33f)
                 };
-                bullet.X = X + Width/2 - bullet.Width / 2;
-                bullet.Y = Y + Height/ 2 - bullet.Height / 2;
+                bullet.X = X + Width/2 - bullet.Width/2;
+                bullet.Y = Y + Height/2 - bullet.Height/2;
                 Engine.SpawnObject($"{Name}_bullet{bulletCounter}", bullet);
             }
         }
@@ -129,8 +130,8 @@ namespace AShamanJourney
         public Vector2 GetHitCenter()
         {
             return new Vector2(
-                X + HitBoxes["auto"].X + HitBoxes["auto"].Width / 2,
-                Y + HitBoxes["auto"].Y + HitBoxes["auto"].Height / 2
+                X + HitBoxes["auto"].X + HitBoxes["auto"].Width/2,
+                Y + HitBoxes["auto"].Y + HitBoxes["auto"].Height/2
                 );
         }
 
@@ -154,7 +155,7 @@ namespace AShamanJourney
             if (damage == null)
             {
                 // simple (closecombat usually) damage
-                damage = new Damage(this, enemy) { DamageFunc = (ch0, ch1) => ch1.Stats.Attack };
+                damage = new Damage(this, enemy) {DamageFunc = (ch0, ch1) => ch1.Stats.Attack};
             }
 
             enemy.GetDamage(this, damage);
@@ -172,7 +173,7 @@ namespace AShamanJourney
             LastHitCharacter = enemy;
             Stats.Hp -= dmg;
 
-            var floatingText = new FloatingText(this, "-" + (int)dmg, Color.White, 0.4f + dmg / 300f);
+            var floatingText = new FloatingText(this, "-" + (int) dmg, Color.White, 0.4f + dmg/300f);
             Engine.SpawnObject(
                 floatingText.Name, floatingText
                 );
@@ -180,6 +181,9 @@ namespace AShamanJourney
             // bounce back only if the damage is from a ranged enemy
             if (damage.KnockBack > 0f)
                 BounceBack(damage);
+
+            AudioSource.Volume = 0.65f;
+            AudioSource.Play(((AudioAsset) Engine.GetAsset("sound_damage")).Clip);
 
             TookDamage(dmg);
             return Stats.Hp;
@@ -257,6 +261,5 @@ namespace AShamanJourney
                     return "movingUp";
             }
         }
-
     }
 }

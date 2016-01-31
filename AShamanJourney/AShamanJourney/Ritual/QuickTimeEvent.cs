@@ -1,23 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
 using Aiv.Engine;
 using Aiv.Fast2D;
-using System.Drawing;
-using OpenTK;
 using TextObject = Aiv.Engine.TextObject;
 
 namespace AShamanJourney
 {
     public class QuickTimeEvent : GameObject
     {
-        private float speed;
-
         private readonly List<TextObject> qteList;
-        private SpriteObject qteBox;
         private bool canFail;
+        private SpriteObject qteBox;
+        private float speed;
+        private readonly float speedAccellerator = 0.06f;
         private bool started;
 
         public QuickTimeEvent(Ritual ritual)
@@ -29,8 +25,30 @@ namespace AShamanJourney
             OnDestroy += DestroyEvent;
         }
 
+        public Ritual Ritual { get; set; }
+
+        public float KeyPadding { get; private set; }
+
+        public float Padding { get; set; } = 15f;
+
+        public float FontSize { get; set; } = 0.6f;
+
+        public static KeyCode[] KeyCodeForQte { get; } = {
+            KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D, KeyCode.Up, KeyCode.Right, KeyCode.Down, KeyCode.Left
+        };
+
+        public TextObject QteLogo0 { get; private set; }
+        public TextObject QteLogo1 { get; private set; }
+
+        public TextObject CurrentKey { get; set; }
+
+        public bool Success { get; set; }
+
         private void DestroyEvent(object sender)
         {
+            var game = (Game) Engine.Objects["game"];
+            game.AudioSource.Resume();
+
             foreach (var qte in qteList.ToArray())
                 qte.Destroy();
             qteBox.Destroy();
@@ -39,15 +57,20 @@ namespace AShamanJourney
             Ritual.Activated(Success);
         }
 
-        public Ritual Ritual { get; set; }
-
         public override void Start()
         {
             base.Start();
+
+            var game = (Game) Engine.Objects["game"];
+            game.AudioSource.Pause();
+
             Engine.TimeModifier = 0f;
 
-            speed = 450f + GameManager.GlobalTimer/10f;
+            speed = 350f + GameManager.GlobalTimer;
             KeyPadding = 250f;
+
+            AudioSource.Volume = 1f;
+            AudioSource.Play(((AudioAsset) Engine.GetAsset("sound_ritual_intro")).Clip);
 
             QteLogo0 = new TextObject(3f, Color.Crimson)
             {
@@ -67,7 +90,7 @@ namespace AShamanJourney
             QteLogo1.Y = QteLogo0.Y + logoMeasure0.Y;
             Engine.SpawnObject($"{Name}_logo0", QteLogo0);
             Engine.SpawnObject($"{Name}_logo1", QteLogo1);
-            Timer.Set("startQte", 3f, ignoreTimeModifier: true);
+            Timer.Set("startQte", 1.5f, ignoreTimeModifier: true);
         }
 
         private void StartEvent()
@@ -76,7 +99,7 @@ namespace AShamanJourney
 
             var xPos = 0f;
             var maxHeight = 0f;
-            foreach (var key in Utils.RandomKeys(5 + (int)GameManager.GlobalTimer / 60, KeyCodeForQte))
+            foreach (var key in Utils.RandomKeys((int) (15 + GameManager.GlobalTimer/30f), KeyCodeForQte))
             {
                 var text = new TextObject(FontSize, Color.Crimson)
                 {
@@ -85,7 +108,7 @@ namespace AShamanJourney
                     IgnoreCamera = true
                 };
                 var textMeasure = text.Measure();
-                text.X = Engine.Width - textMeasure.X / 2f + xPos;
+                text.X = Engine.Width - textMeasure.X/2f + xPos;
                 text.Y = Engine.Height - textMeasure.Y - Padding;
                 qteList.Add(text);
 
@@ -94,27 +117,20 @@ namespace AShamanJourney
                 if (textMeasure.Y > maxHeight)
                     maxHeight = textMeasure.Y;
             }
-            var qteBoxAsset = (SpriteAsset)Engine.GetAsset("qteContainer");
-            qteBox = new SpriteObject(qteBoxAsset.Width, (int)(qteBoxAsset.Height * 0.66f))
+            var qteBoxAsset = (SpriteAsset) Engine.GetAsset("qteContainer");
+            qteBox = new SpriteObject(qteBoxAsset.Width, (int) (qteBoxAsset.Height*0.66f))
             {
                 Order = 11,
                 CurrentSprite = qteBoxAsset,
                 IgnoreCamera = true
             };
-            qteBox.X = Engine.Width / 2 - qteBox.Width / 2;
-            qteBox.Y = Engine.Height - qteBox.Height - Padding * 0.5f;
+            qteBox.X = Engine.Width/2 - qteBox.Width/2;
+            qteBox.Y = Engine.Height - qteBox.Height - Padding*0.5f;
             Engine.SpawnObject($"{Name}_qteBox", qteBox);
+
+            AudioSource.Volume = 0.7f;
+            AudioSource.Play(((AudioAsset) Engine.GetAsset("sound_ritual_soundtrack")).Clip);
         }
-
-        public float KeyPadding { get; private set; }
-
-        public float Padding { get; set; } = 15f;
-
-        public float FontSize { get; set; } = 0.6f;
-
-        public static KeyCode[] KeyCodeForQte { get; } = {
-            KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D, KeyCode.Up, KeyCode.Right, KeyCode.Down, KeyCode.Left
-        };
 
         public override void Update()
         {
@@ -122,29 +138,28 @@ namespace AShamanJourney
             if (GameManager.MainWindow != "game" || Success) return;
             if (!started)
             {
-                if (Timer.Get("startQte") <= 0) { 
+                if (Timer.Get("startQte") <= 0)
+                {
                     StartEvent();
                     QteLogo0.Destroy();
                     QteLogo1.Destroy();
                 }
                 return;
             }
+            speed += speed*speedAccellerator*UnchangedDeltaTime;
 
             foreach (var item in qteList)
             {
-                item.X -= Engine.UnchangedDeltaTime * speed;
+                item.X -= Engine.UnchangedDeltaTime*speed;
             }
             Input();
         }
-
-        public TextObject QteLogo0 { get; private set; }
-        public TextObject QteLogo1 { get; private set; }
 
         private void Input()
         {
             // current pressed keys
             var pressedKeys = new List<string>();
-            foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
+            foreach (KeyCode key in Enum.GetValues(typeof (KeyCode)))
             {
                 if (Engine.IsKeyDown(key))
                 {
@@ -204,9 +219,5 @@ namespace AShamanJourney
                 result = key.ToString();
             return result.ToUpper();
         }
-
-        public TextObject CurrentKey { get; set; }
-
-        public bool Success { get; set; }
     }
 }

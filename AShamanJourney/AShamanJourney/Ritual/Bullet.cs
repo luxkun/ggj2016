@@ -7,10 +7,10 @@ namespace AShamanJourney
     public class Bullet : SpriteObject
     {
         private Vector2 direction;
-        private Func<GameObject.Collision, bool> hitMask;
-        private Character owner;
+        private readonly Func<Collision, bool> hitMask;
+        private readonly Character owner;
 
-        public Bullet(Character owner, SpriteAsset bulletAsset, Vector2 direction, Func<GameObject.Collision, bool> hitMask) :
+        public Bullet(Character owner, SpriteAsset bulletAsset, Vector2 direction, Func<Collision, bool> hitMask) :
             base(bulletAsset.Width, bulletAsset.Height, true)
         {
             this.owner = owner;
@@ -22,12 +22,22 @@ namespace AShamanJourney
         public override void Start()
         {
             base.Start();
+
+            Timer.Set("destroyTimer", 20f);
+
+            AudioSource.Volume = 0.7f;
+            AudioSource.Play(((AudioAsset) Engine.GetAsset("sound_bullet")).Clip);
         }
 
         public override void Update()
         {
             base.Update();
 
+            if (Timer.Get("destroyTimer") <= 0)
+            {
+                Destroy();
+                return;
+            }
             ManageMovement();
             ManageCollisions();
         }

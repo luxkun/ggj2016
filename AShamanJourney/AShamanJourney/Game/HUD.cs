@@ -1,33 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Aiv.Engine;
 using System.Drawing;
+using Aiv.Engine;
 using OpenTK;
 
 namespace AShamanJourney
 {
-    class Hud : GameObject
+    internal class Hud : GameObject
     {
-        public int Padding { get; private set; }
-        public int InnerPadding { get; private set; }
-
-        private TextObject hp;
-        private TextObject xp;
-        private TextObject lvl;
-        private TextObject timer;
-        private TextObject hpNumber;
-        private TextObject xpNumber;
-        private TextObject wave;
-        private TextObject waveTimer;
+        private readonly TextObject hp;
 
         private RectangleObject hpBar;
-        private RectangleObject xpBar;
         private RectangleObject hpBarBorder;
+        private readonly TextObject hpNumber;
+        private readonly TextObject lvl;
+        private readonly TextObject timer;
+        private readonly TextObject wave;
+        private readonly TextObject waveTimer;
+        private readonly TextObject xp;
+        private RectangleObject xpBar;
         private RectangleObject xpBarBorder;
-
+        private readonly TextObject xpNumber;
 
 
         public Hud()
@@ -45,14 +37,17 @@ namespace AShamanJourney
             wave.Order = 10;
             waveTimer = new TextObject(fontSize, Color.Beige);
             waveTimer.Order = 10;
-            hpNumber = new TextObject(fontSize / 2, Color.DarkGray);
+            hpNumber = new TextObject(fontSize/2, Color.DarkGray);
             hpNumber.Order = 11;
-            xpNumber = new TextObject(fontSize / 2, Color.DarkGray);
+            xpNumber = new TextObject(fontSize/2, Color.DarkGray);
             xpNumber.Order = 11;
 
             Padding = 20;
-            InnerPadding = Padding / 2;
+            InnerPadding = Padding/2;
         }
+
+        public int Padding { get; }
+        public int InnerPadding { get; }
 
         public override void Start()
         {
@@ -86,22 +81,22 @@ namespace AShamanJourney
             waveTimer.IgnoreCamera = true;
             //
 
-            hpBar = new RectangleObject(150, (int)hpMeasure.Y)
+            hpBar = new RectangleObject(150, (int) hpMeasure.Y)
             {
                 Fill = true,
                 Order = 10
             };
-            xpBar = new RectangleObject(150, (int)xpMeasure.Y)
+            xpBar = new RectangleObject(150, (int) xpMeasure.Y)
             {
                 Fill = true,
                 Order = 10
             };
 
-            hpBarBorder = new RectangleObject(150, (int)hpMeasure.Y)
+            hpBarBorder = new RectangleObject(150, (int) hpMeasure.Y)
             {
                 Order = 10
             };
-            xpBarBorder = new RectangleObject(150, (int)xpMeasure.Y)
+            xpBarBorder = new RectangleObject(150, (int) xpMeasure.Y)
             {
                 Order = 10
             };
@@ -145,26 +140,26 @@ namespace AShamanJourney
 
         public void UpdateHp(Player player)
         {
-            hpBar.Scale = new Vector2(player.Stats.Hp / player.Stats.MaxHp, 1f);
-            hpNumber.Text = $"{player.Stats.Hp} - {player.Stats.MaxHp}";
+            hpBar.Box.scale = new Vector2((float) Math.Round(player.Stats.Hp/player.Stats.MaxHp, 2), 1f);
+            hpNumber.Text = $"{(int) player.Stats.Hp} - {(int) player.Stats.MaxHp}";
             var hpNumberMeasure = hpNumber.Measure();
-            hpNumber.X = hpBarBorder.X + (hpBarBorder.Width / 2) - (hpNumberMeasure.X / 2);
-            hpNumber.Y = hpBarBorder.Y + (hpBarBorder.Height / 2) - (hpNumberMeasure.Y / 2);
+            hpNumber.X = hpBarBorder.X + hpBarBorder.Width/2 - hpNumberMeasure.X/2;
+            hpNumber.Y = hpBarBorder.Y + hpBarBorder.Height/2 - hpNumberMeasure.Y/2;
         }
 
         public void UpdateXp(Player player)
         {
-            xpBar.Scale = new Vector2((float)player.Stats.Xp / player.Stats.XpForNextLevel, 1f);
+            xpBar.Box.scale = new Vector2((float) Math.Round((float) player.Stats.Xp/player.Stats.XpForNextLevel, 2), 1f);
             xpNumber.Text = $"{player.Stats.Xp} - {player.Stats.XpForNextLevel}";
             var xpNumberMeasure = xpNumber.Measure();
-            xpNumber.X = xpBarBorder.X + (xpBarBorder.Width / 2) - (xpNumberMeasure.X / 2);
-            xpNumber.Y = xpBarBorder.Y + (xpBarBorder.Height / 2) - (xpNumberMeasure.Y / 2);
+            xpNumber.X = xpBarBorder.X + xpBarBorder.Width/2 - xpNumberMeasure.X/2;
+            xpNumber.Y = xpBarBorder.Y + xpBarBorder.Height/2 - xpNumberMeasure.Y/2;
             lvl.Text = $"Level {player.Stats.Level + 1}";
         }
 
         public void UpdateTimer()
         {
-            timer.Text = $"Timer {(int)GameManager.LocalTimer} - {(int)GameManager.GlobalTimer}";
+            timer.Text = $"Timer {(int) GameManager.LocalTimer} - {(int) GameManager.GlobalTimer}";
         }
 
         public void UpdateWave()
@@ -174,7 +169,7 @@ namespace AShamanJourney
             wave.X = Engine.Width - waveMeasure.X - Padding;
             wave.Y = Padding;
 
-            waveTimer.Text = $"Next Wave {(int) ((Game)Engine.Objects["game"]).Timer.Get("nextWave")}s";
+            waveTimer.Text = $"Next Wave {(int) ((Game) Engine.Objects["game"]).Timer.Get("nextWave")}s";
             var waveTimerMeasure = waveTimer.Measure();
             waveTimer.X = Engine.Width - waveTimerMeasure.X - Padding;
             waveTimer.Y = wave.Y + waveMeasure.Y + Padding;

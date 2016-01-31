@@ -21,7 +21,7 @@ namespace AShamanJourney
                 $"{owner.Name}_floatingtext_{Guid.NewGuid()}";
             Order = owner.Order;
             Text = text;
-            xPadding = (float)new Random((int)DateTime.Now.Ticks).NextDouble() * 3;
+            xPadding = (float) new Random((int) DateTime.Now.Ticks).NextDouble()*3;
 
             startingX = owner.X;
             startingY = owner.Y;
@@ -41,10 +41,10 @@ namespace AShamanJourney
             if (Timer.Get("lifeSpan") < 0)
                 Destroy();
             // cos(x) => [0, 1] * 0.33 => [0, 0.33] + 0.33 => [0.33, 0.66]
-            X = startingX + (int)(owner.Width * (0.33f + Math.Cos(xPadding) * 0.33f));
-            Y = startingY - (int)padding;
-            padding += DeltaTime * paddingStepY;
-            xPadding += DeltaTime * paddingStepX;
+            X = startingX + (int) (owner.Width*(0.33f + Math.Cos(xPadding)*0.33f));
+            Y = startingY - (int) padding;
+            padding += DeltaTime*paddingStepY;
+            xPadding += DeltaTime*paddingStepX;
         }
     }
 }

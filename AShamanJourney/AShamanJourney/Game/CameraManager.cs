@@ -4,16 +4,11 @@ namespace AShamanJourney
 {
     public class CameraManager : GameObject
     {
-        public CameraManager()
-        {
-
-        }
-
         public override void Update()
         {
             var player = (Player) Engine.Objects["player"];
-            var cameraX = player.X - player.Width / 2 - Engine.Width / 2;
-            var cameraY = player.Y - player.Height / 2 - Engine.Height / 2;
+            var cameraX = player.X - player.Width/2 - Engine.Width/2;
+            var cameraY = player.Y - player.Height/2 - Engine.Height/2;
             var world = (World) Engine.Objects["world"];
 
             if (cameraX < world.calculatedStart.X)

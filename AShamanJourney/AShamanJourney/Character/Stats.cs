@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace AShamanJourney
 {
     public class Stats
     {
         private float hp;
-        private float attack;
-        private long xpReward;
-        private float speed;
-        private long xpForNextLevel;
         private long xp;
+        private long xpForNextLevel;
 
         public Stats(Character owner, Dictionary<string, float> levelUpModifiers)
         {
@@ -18,7 +14,7 @@ namespace AShamanJourney
             LevelUpModifiers = levelUpModifiers;
         }
 
-        public Dictionary<string, float> LevelUpModifiers { get; set; } 
+        public Dictionary<string, float> LevelUpModifiers { get; set; }
 
         public Character Owner { get; set; }
 
@@ -27,23 +23,18 @@ namespace AShamanJourney
             get { return hp; }
             set
             {
+                if (value > MaxHp)
+                    value = MaxHp;
                 hp = value;
                 Owner.HpChanged();
             }
         }
+
         public float MaxHp { get; set; }
 
-        public float Attack
-        {
-            get { return attack; }
-            set { attack = value; }
-        }
+        public float Attack { get; set; }
 
-        public long XpReward
-        {
-            get { return xpReward; }
-            set { xpReward = value; }
-        }
+        public long XpReward { get; set; }
 
         public long Xp
         {
@@ -58,6 +49,21 @@ namespace AShamanJourney
         }
 
         public int Level { get; set; }
+
+        public float Speed { get; set; }
+
+        public long XpForNextLevel
+        {
+            get { return xpForNextLevel; }
+            set
+            {
+                xpForNextLevel = value;
+                Owner.XpChanged(0);
+            }
+        }
+
+        public float AttackSpeed { get; set; }
+        public float RangedSpeed { get; set; }
 
         private void LevelCheck()
         {
@@ -78,38 +84,18 @@ namespace AShamanJourney
                             Attack *= m;
                             break;
                         case "xpReward":
-                            XpReward = (int) (XpReward * m);
+                            XpReward = (int) (XpReward*m);
                             break;
                         case "speed":
                             Speed *= m;
                             break;
                         case "xpForNextLevel":
-                            XpForNextLevel = (int) (XpForNextLevel * m);
+                            XpForNextLevel = (int) (XpForNextLevel*m);
                             break;
                     }
-
                 }
             }
         }
-
-        public float Speed
-        {
-            get { return speed; }
-            set { speed = value; }
-        }
-
-        public long XpForNextLevel
-        {
-            get { return xpForNextLevel; }
-            set
-            {
-                xpForNextLevel = value;
-                Owner.XpChanged(0);
-            }
-        }
-
-        public float AttackSpeed { get; set; }
-        public float RangedSpeed { get; set; }
 
         public Stats Clone()
         {

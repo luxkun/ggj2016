@@ -13,10 +13,14 @@ namespace AShamanJourney
 
         public static int Wave { get; set; }
 
+        public static Random Random { get; set; }
+        public static float GlobalTimer { get; set; }
+        public static float LocalTimer { get; set; }
+
         //static GameManager()
         public static void Initialize()
         {
-            engine = new Engine("A Shaman's Journey", 1280, 720, 60, false);
+            engine = new Engine("A Shaman's Journey", 1280, 720, 60, true);
 #if DEBUG
             engine.debugCollisions = true;
 #endif
@@ -31,7 +35,8 @@ namespace AShamanJourney
         {
             TextConfig.Default = new TextConfig(
                 new Asset("ArcadeFont.png"),
-                new Dictionary<char, Tuple<Vector2, Vector2>>  {
+                new Dictionary<char, Tuple<Vector2, Vector2>>
+                {
                     {"è".ToUpper()[0], Tuple.Create(new Vector2(287f, 290f), new Vector2(63f, 63f))}, // TOP
                     {"à".ToUpper()[0], Tuple.Create(new Vector2(357f, 290f), new Vector2(63f, 63f))}, // LEFT
                     {"ò".ToUpper()[0], Tuple.Create(new Vector2(428f, 290f), new Vector2(63f, 63f))}, // DOWN
@@ -83,14 +88,10 @@ namespace AShamanJourney
                     {'.', Tuple.Create(new Vector2(515f, 186f), new Vector2(33f, 63f))},
                     {',', Tuple.Create(new Vector2(206f, 290f), new Vector2(30f, 63f))},
                     //{',', Tuple.Create(new Vector2(272f, 93f), new Vector2(13f, 31f))},
-                    {'"', Tuple.Create(new Vector2(564f, 186f), new Vector2(51f, 63f))},
+                    {'"', Tuple.Create(new Vector2(564f, 186f), new Vector2(51f, 63f))}
                     //{'\'', Tuple.Create(new Vector2(285f, 93f), new Vector2(13f, 31f))}
-            }, Color.White, 32f, 63f, staticColor: false);
+                }, Color.White, 32f, 63f, staticColor: false);
         }
-
-        public static Random Random { get; set; }
-        public static float GlobalTimer { get; set; }
-        public static float LocalTimer { get; set; }
 
         private static void LoadAssets()
         {
@@ -109,8 +110,8 @@ namespace AShamanJourney
             engine.LoadAsset("background0", new SpriteAsset("background0.png"));
             engine.LoadAsset("swamp0", new SpriteAsset("swamp0.png"));
             var tree = new SpriteAsset("tree0.png");
-            engine.LoadAsset("tree0_top", new SpriteAsset("tree0.png", 0, 0, tree.Width, tree.Height / 2));
-            engine.LoadAsset("tree0_bottom", new SpriteAsset("tree0.png", 0, tree.Height / 2, tree.Width, tree.Height / 2));
+            engine.LoadAsset("tree0_top", new SpriteAsset("tree0.png", 0, 0, tree.Width, tree.Height/2));
+            engine.LoadAsset("tree0_bottom", new SpriteAsset("tree0.png", 0, tree.Height/2, tree.Width, tree.Height/2));
 
             // enemies
             Utils.LoadAnimation(engine, "earthMinion", "earthMinion.png", 4, 4);
@@ -126,24 +127,44 @@ namespace AShamanJourney
             Utils.LoadAnimation(engine, "bear", "bear.png", 3, 4);
             Utils.LoadAnimation(engine, "wolf", "wolf.png", 3, 4);
             Utils.LoadAnimation(engine, "rhyno", "rhyno.png", 3, 4);
+
+            // SOUND
+            engine.LoadAsset("sound_soundtrack", new AudioAsset("sound/soundtrack.ogg"));
+            engine.LoadAsset("sound_ritual_intro", new AudioAsset("sound/ritual_intro.ogg"));
+            engine.LoadAsset("sound_ritual_soundtrack", new AudioAsset("sound/ritual_soundtrack.ogg"));
+            engine.LoadAsset("sound_damage", new AudioAsset("sound/damage.ogg"));
+            engine.LoadAsset("sound_heal", new AudioAsset("sound/heal.ogg"));
+            engine.LoadAsset("sound_bullet", new AudioAsset("sound/bullet.ogg"));
+
+            // pregame
+            engine.LoadAsset("logo", new SpriteAsset("preGame.png"));
         }
 
         public static void Run()
         {
             EnemyInfo.Initialize(engine);
 
+            StartLogo();
+
+            engine.Run();
+        }
+
+        private static void StartLogo()
+        {
+            var preGame = new PreGame();
+            engine.SpawnObject("preGame", preGame);
+        }
+
+        private static void StartGame()
+        {
             var hud = new Hud();
             engine.SpawnObject("hud", hud);
 
             var game = new Game();
             engine.SpawnObject("game", game);
 
-            var player = (Player) engine.Objects["player"];
-            var cameraManager = new CameraManager();
-            cameraManager.Order = 99;
+            var cameraManager = new CameraManager {Order = 99};
             engine.SpawnObject("cameraManager", cameraManager);
-            
-            engine.Run();
         }
     }
 }

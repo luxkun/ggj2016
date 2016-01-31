@@ -4,22 +4,28 @@ namespace AShamanJourney
 {
     public class TruncatedObject : SpriteObject
     {
-        private readonly SpriteObject topSprite;
         private readonly SpriteObject bottomSprite;
         private readonly SpriteAsset bottomSpriteAsset;
+        private readonly SpriteObject topSprite;
         private readonly SpriteAsset topSpriteAsset;
 
-        public TruncatedObject(string name, SpriteAsset bottomSpriteAsset, SpriteAsset topSpriteAsset) : base(bottomSpriteAsset.Width, bottomSpriteAsset.Height)
+        public TruncatedObject(string name, SpriteAsset bottomSpriteAsset, SpriteAsset topSpriteAsset)
+            : base(bottomSpriteAsset.Width, bottomSpriteAsset.Height)
         {
             topSprite = new SpriteObject(topSpriteAsset.Width, topSpriteAsset.Height);
             topSprite.CurrentSprite = topSpriteAsset;
             topSprite.Order = 9;
-            bottomSprite = new SpriteObject(bottomSpriteAsset.Width, bottomSpriteAsset.Height, true);
+            bottomSprite = new SpriteObject(bottomSpriteAsset.Width, bottomSpriteAsset.Height);
             bottomSprite.CurrentSprite = bottomSpriteAsset;
             bottomSprite.Order = 1;
+            AddHitBox(
+                "bottomtree", 0, (int) topSprite.Height, (int) bottomSprite.Width,
+                (int) bottomSprite.Height);
             this.bottomSpriteAsset = bottomSpriteAsset;
             this.topSpriteAsset = topSpriteAsset;
             Name = name;
+
+            OnDestroy += DestroyEvent;
         }
 
         // Add others override if needed
@@ -32,6 +38,7 @@ namespace AShamanJourney
                 bottomSprite.X = value;
             }
         }
+
         public override float Y
         {
             get { return topSprite.Y; }
@@ -40,6 +47,12 @@ namespace AShamanJourney
                 topSprite.Y = value;
                 bottomSprite.Y = value + topSprite.Height;
             }
+        }
+
+        private void DestroyEvent(object sender)
+        {
+            topSprite.Destroy();
+            bottomSprite.Destroy();
         }
 
         public override void Start()

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Aiv.Engine;
+using OpenTK;
 
 namespace AShamanJourney
 {
@@ -13,10 +10,13 @@ namespace AShamanJourney
         public static Enemy wolf;
         public static Enemy rhyno;
 
-        private static readonly Dictionary<string, float> LevelUpModifiers = new Dictionary<string, float>()
+        private static readonly Dictionary<string, float> LevelUpModifiers = new Dictionary<string, float>
         {
-            { "attack", 0.3f }, { "maxHp", 0.2f }, { "xpReward", 0.4f },
-            { "speed", 0.1f }, { "xpForNextLevel", 0.1f }
+            {"attack", 0.3f},
+            {"maxHp", 0.2f},
+            {"xpReward", 0.4f},
+            {"speed", 0.1f},
+            {"xpForNextLevel", 0.1f}
         };
 
 
@@ -26,42 +26,45 @@ namespace AShamanJourney
             {
                 Stats =
                 {
-                    Hp = 150f,
                     MaxHp = 200f,
                     Speed = 100f,
-                    Attack = 90f,
-                    XpForNextLevel = 105,
+                    Attack = 120f,
+                    XpReward = 30,
+                    XpForNextLevel = 60,
                     AttackSpeed = 1.3f
                 },
-                RangeRadius = 1000f
+                RangeRadius = 1000f,
+                Scale = new Vector2(1.5f, 1.5f)
             };
 
             wolf = new Enemy("wolf", 50, 20, LevelUpModifiers)
             {
                 Stats =
                 {
-                    Hp = 90f,
-                    MaxHp = 180f,
+                    MaxHp = 100f,
                     Speed = 150f,
                     Attack = 100f,
+                    XpReward = 20,
                     XpForNextLevel = 60,
-                    AttackSpeed = 1f
+                    AttackSpeed = 0.66f
                 },
-                RangeRadius = 1000f
+                RangeRadius = 1000f,
+                Scale = new Vector2(1.75f, 1.75f)
             };
 
-            rhyno = new Enemy("boar", 60, 30, LevelUpModifiers)
+            rhyno = new Enemy("rhyno", 60, 30, LevelUpModifiers)
             {
                 Stats =
                 {
-                    Hp = 200f,
-                    MaxHp = 150f,
+                    MaxHp = 300f,
                     Speed = 100f,
                     Attack = 140f,
-                    XpForNextLevel = 90,
-                    AttackSpeed = 1.3f
+                    XpReward = 30,
+                    XpForNextLevel = 60,
+                    AttackSpeed = 1f
                 },
-                RangeRadius = 1000f
+                RangeRadius = 1000f,
+                Scale = new Vector2(2.5f, 2.5f)
             };
 
             AddAnimations(engine);

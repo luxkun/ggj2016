@@ -19,7 +19,7 @@ namespace AShamanJourney
             set
             {
                 direction = value;
-                InverseDirection = value * -1;
+                InverseDirection = value*-1;
             }
         }
 

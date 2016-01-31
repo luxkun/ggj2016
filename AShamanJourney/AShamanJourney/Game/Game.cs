@@ -1,69 +1,104 @@
-﻿using System;
-using Aiv.Engine;
+﻿using Aiv.Engine;
+using Aiv.Fast2D;
 
 namespace AShamanJourney
 {
     public class Game : GameObject
     {
-        private float minWaveDelay = 20;
-
-        public Game()
-        {
-        }
+        private readonly float minWaveDelay = 20;
 
         public override void Update()
         {
             base.Update();
 
             UpdateTimers();
-            SpawnEnemies();
+            if (GameManager.GlobalTimer > 10f)
+                SpawnEnemies();
+            ManageControls();
+        }
+
+        private void ManageControls()
+        {
+            // window change inputs
+            if (Timer.Get("changeWindowTimer") > 0) return;
+            if (Engine.IsKeyDown(KeyCode.Esc))
+            {
+                Timer.Set("changeWindowTimer", 1f, ignoreTimeModifier: true);
+                if (GameManager.MainWindow == "pause")
+                    UnPause();
+                else
+                    Pause();
+            }
+        }
+
+        private void UnPause()
+        {
+            GameManager.MainWindow = "game";
+            AudioSource.Resume();
+            Engine.TimeModifier = 1f;
+        }
+
+        private void Pause()
+        {
+            GameManager.MainWindow = "pause";
+            AudioSource.Pause();
+            Engine.TimeModifier = 0f;
         }
 
         private void SpawnEnemies()
         {
-            var world = (World)Engine.Objects["world"];
+            var world = (World) Engine.Objects["world"];
             if (Timer.Get("nextWave") <= 0 || World.SpawnedObjects[2].Count <= 0)
             {
-                float delay = 90 - GameManager.LocalTimer/60f;
+                var delay = 90 - GameManager.LocalTimer/60f;
                 if (delay < minWaveDelay)
                     delay = minWaveDelay;
                 GameManager.Wave++;
                 Timer.Set("nextWave", delay);
 
-                for (int i = 0; i < 6 + GameManager.Wave*2; i++)
+                for (var i = 0; i < 8 + GameManager.Wave*3; i++)
                 {
                     var start = world.calculatedStart;
                     var end = world.calculatedEnd;
                     var xLen = end.X - start.X;
                     var yLen = end.Y - start.Y;
-                    var choosenX = start.X + xLen*GameManager.Random.NextDouble();
-                    var choosenY = start.Y + yLen * GameManager.Random.NextDouble();
-                    while (world.PickRandomObject((int) choosenX, (int) choosenY, 2) == null) { }
+                    int choosenX;
+                    int choosenY;
+                    do
+                    {
+                        choosenX = (int) (start.X + xLen*GameManager.Random.NextDouble());
+                        choosenY = (int) (start.Y + yLen*GameManager.Random.NextDouble());
+                    } while (world.PickRandomObject(choosenX, choosenY, 2) == null);
                 }
             }
-            var hud = (Hud) Engine.Objects["hud"];
-            hud.UpdateWave();
         }
 
         private void UpdateTimers()
         {
             GameManager.GlobalTimer += DeltaTime;
             GameManager.LocalTimer += DeltaTime;
-            ((Hud)Engine.Objects["hud"]).UpdateTimer();
+            var hud = (Hud) Engine.Objects["hud"];
+            hud.UpdateTimer();
+            hud.UpdateWave();
         }
 
         public override void Start()
         {
             base.Start();
 
+            AudioSource.Volume = 0.4f;
+            AudioSource.Stream(Engine.GetAsset("sound_soundtrack").FileName, true);
+
             GameManager.MainWindow = "game";
             // spawn player
-            var player = new Player("player", 250/3, 300/3);
+            var player = new Player("player", 251/3, 300/3);
             Engine.SpawnObject(player);
 
             // spawn world (procederal background + background parts + enemies + rituals)
             var world = new World();
             Engine.SpawnObject("world", world);
+
+            SpawnEnemies();
         }
     }
 }

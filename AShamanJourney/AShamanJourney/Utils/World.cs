@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Aiv.Engine;
 using OpenTK;
@@ -9,13 +7,13 @@ namespace AShamanJourney
 {
     internal class World : GameObject
     {
-        private readonly List<Dictionary<SpriteObject, float>> objectsSpawnRate;
         public static List<List<SpriteObject>> SpawnedObjects;
-        private readonly List<float> spawnChance; 
+        private readonly List<Dictionary<SpriteObject, float>> objectsSpawnRate;
         private readonly List<float> rndRanges;
+        private readonly List<float> spawnChance;
+        public Vector2 calculatedEnd;
 
         public Vector2 calculatedStart;
-        public Vector2 calculatedEnd;
         // virtual size/2 of the open world
         private Vector2 maxPosition;
 
@@ -28,11 +26,15 @@ namespace AShamanJourney
             objectsSpawnRate = new List<Dictionary<SpriteObject, float>>();
             SpawnedObjects = new List<List<SpriteObject>>
             {
-                new List<SpriteObject>(), new List<SpriteObject>(), new List<SpriteObject>()
+                new List<SpriteObject>(),
+                new List<SpriteObject>(),
+                new List<SpriteObject>()
             };
-            spawnChance = new List<float>()
+            spawnChance = new List<float>
             {
-                0.3f, 1f, 1f
+                0.3f,
+                1f,
+                1f
             };
             rndRanges = new List<float>();
         }
@@ -50,31 +52,31 @@ namespace AShamanJourney
 
             // details
             objectsSpawnRate.Add(new Dictionary<SpriteObject, float>());
-            var swamp0Asset = (SpriteAsset)Engine.GetAsset("swamp0");
+            var swamp0Asset = (SpriteAsset) Engine.GetAsset("swamp0");
             var swamp0 = new SpriteObject(swamp0Asset.Width, swamp0Asset.Height, true)
             {
                 Name = "swamp0",
                 CurrentSprite = swamp0Asset,
                 Order = 2
             };
-            objectsSpawnRate[0][swamp0] = 0.2f;
+            objectsSpawnRate[0][swamp0] = 0.1f;
 
-            var tree0AssetTop = (SpriteAsset)Engine.GetAsset("tree0_top");
-            var tree0AssetBottom = (SpriteAsset)Engine.GetAsset("tree0_bottom");
+            var tree0AssetTop = (SpriteAsset) Engine.GetAsset("tree0_top");
+            var tree0AssetBottom = (SpriteAsset) Engine.GetAsset("tree0_bottom");
             var tree0 = new TruncatedObject("tree0", tree0AssetBottom, tree0AssetTop) {Order = 2};
-            objectsSpawnRate[0][tree0] = 3f;
+            objectsSpawnRate[0][tree0] = 5f;
 
             var ritualAsset = (SpriteAsset) Engine.GetAsset("ritual0_0_0");
             var ritual0 = new Ritual(ritualAsset.Width, ritualAsset.Height, Ritual.RitualType.Demoniac) {Order = 2};
             var ritual1 = new Ritual(ritualAsset.Width, ritualAsset.Height, Ritual.RitualType.Earth) {Order = 2};
             var ritual2 = new Ritual(ritualAsset.Width, ritualAsset.Height, Ritual.RitualType.Life) {Order = 2};
-            objectsSpawnRate[0][ritual2] = 0.3f;
             objectsSpawnRate[0][ritual0] = 0.1f;
+            objectsSpawnRate[0][ritual2] = 0.13f;
             objectsSpawnRate[0][ritual1] = 0.1f;
 
             // backgrounds
             objectsSpawnRate.Add(new Dictionary<SpriteObject, float>());
-            var background0Asset = (SpriteAsset)Engine.GetAsset("background0");
+            var background0Asset = (SpriteAsset) Engine.GetAsset("background0");
             var background0 = new SpriteObject(background0Asset.Width, background0Asset.Height)
             {
                 Name = "background0",
@@ -89,6 +91,17 @@ namespace AShamanJourney
             bear.Name = "bear0";
             bear.Order = 6;
             objectsSpawnRate[2][bear] = 1f;
+
+            var rhyno = EnemyInfo.rhyno;
+            bear.Name = "rhyno0";
+            bear.Order = 6;
+            objectsSpawnRate[2][rhyno] = 1f;
+
+            var wolf = EnemyInfo.wolf;
+            bear.Name = "wolf0";
+            bear.Order = 6;
+            objectsSpawnRate[2][wolf] = 1f;
+
 
             var count = 0;
             foreach (var dict in objectsSpawnRate)
@@ -119,11 +132,11 @@ namespace AShamanJourney
             // destroy everything outside 
             //foreach (var o )w
             // TODO: if slow calculate spawns in "boxes"
-            var player = (Player)Engine.Objects["player"];
-            if ((player.X - calculatedStart.X) > maxPosition.X ||
-                (player.Y - calculatedStart.Y) > maxPosition.Y ||
-                (player.X - calculatedEnd.X) > maxPosition.X ||
-                (player.Y - calculatedEnd.Y) > maxPosition.Y)
+            var player = (Player) Engine.Objects["player"];
+            if (player.X - calculatedStart.X > maxPosition.X ||
+                player.Y - calculatedStart.Y > maxPosition.Y ||
+                player.X - calculatedEnd.X > maxPosition.X ||
+                player.Y - calculatedEnd.Y > maxPosition.Y)
             {
                 UpdateWorld(player);
             }
@@ -136,25 +149,25 @@ namespace AShamanJourney
             calculatedStart = new Vector2(player.X, player.Y) - maxPosition;
             calculatedEnd = new Vector2(player.X, player.Y) + maxPosition;
 
-            var defaultBackground = (SpriteObject)objectsSpawnRate[1].Keys.ElementAt(0);
-            var defaultDetails = (SpriteObject)objectsSpawnRate[0].Keys.ElementAt(0);
+            var defaultBackground = objectsSpawnRate[1].Keys.ElementAt(0);
+            var defaultDetails = objectsSpawnRate[0].Keys.ElementAt(0);
 
             // SPAWN BACKGROUND
             // 1
-            for (int x = (int)calculatedStart.X; x < calculatedEnd.X; x += (int)defaultBackground.Width)
-                for (int y = (int)calculatedStart.Y; y < oldCalculatedStart.Y; y += (int)defaultBackground.Height)
+            for (var x = (int) calculatedStart.X; x < calculatedEnd.X; x += (int) defaultBackground.Width)
+                for (var y = (int) calculatedStart.Y; y < oldCalculatedStart.Y; y += (int) defaultBackground.Height)
                     PickRandomObject(x, y, 1);
             // 2
-            for (int x = (int)oldCalculatedEnd.X; x < calculatedEnd.X; x += (int)defaultBackground.Width)
-                for (int y = (int)oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
+            for (var x = (int) oldCalculatedEnd.X; x < calculatedEnd.X; x += (int) defaultBackground.Width)
+                for (var y = (int) oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int) defaultBackground.Height)
                     PickRandomObject(x, y, 1);
             // 3
-            for (int x = (int)oldCalculatedStart.X; x < oldCalculatedEnd.X; x += (int)defaultBackground.Width)
-                for (int y = (int)oldCalculatedEnd.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
+            for (var x = (int) oldCalculatedStart.X; x < oldCalculatedEnd.X; x += (int) defaultBackground.Width)
+                for (var y = (int) oldCalculatedEnd.Y; y < calculatedEnd.Y; y += (int) defaultBackground.Height)
                     PickRandomObject(x, y, 1);
             // 4
-            for (int x = (int)calculatedStart.X; x < oldCalculatedStart.X; x += (int)defaultBackground.Width)
-                for (int y = (int)oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
+            for (var x = (int) calculatedStart.X; x < oldCalculatedStart.X; x += (int) defaultBackground.Width)
+                for (var y = (int) oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int) defaultBackground.Height)
                     PickRandomObject(x, y, 1);
 
             // SPAWN ENEMIES
@@ -177,20 +190,20 @@ namespace AShamanJourney
 
             // SPAWN RANDOM OBJECTS
             // 1
-            for (int x = (int)calculatedStart.X; x < calculatedEnd.X; x += (int)defaultDetails.Width)
-                for (int y = (int)calculatedStart.Y; y < oldCalculatedStart.Y; y += (int)defaultDetails.Height)
+            for (var x = (int) calculatedStart.X; x < calculatedEnd.X; x += (int) defaultDetails.Width)
+                for (var y = (int) calculatedStart.Y; y < oldCalculatedStart.Y; y += (int) defaultDetails.Height)
                     PickRandomObject(x, y, 0);
             // 2
-            for (int x = (int)oldCalculatedEnd.X; x < calculatedEnd.X; x += (int)defaultDetails.Width)
-                for (int y = (int)oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultDetails.Height)
+            for (var x = (int) oldCalculatedEnd.X; x < calculatedEnd.X; x += (int) defaultDetails.Width)
+                for (var y = (int) oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int) defaultDetails.Height)
                     PickRandomObject(x, y, 0);
             // 3
-            for (int x = (int)oldCalculatedStart.X; x < oldCalculatedEnd.X; x += (int)defaultDetails.Width)
-                for (int y = (int)oldCalculatedEnd.Y; y < calculatedEnd.Y; y += (int)defaultDetails.Height)
+            for (var x = (int) oldCalculatedStart.X; x < oldCalculatedEnd.X; x += (int) defaultDetails.Width)
+                for (var y = (int) oldCalculatedEnd.Y; y < calculatedEnd.Y; y += (int) defaultDetails.Height)
                     PickRandomObject(x, y, 0);
             // 4
-            for (int x = (int)calculatedStart.X; x < oldCalculatedStart.X; x += (int)defaultDetails.Width)
-                for (int y = (int)oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultDetails.Height)
+            for (var x = (int) calculatedStart.X; x < oldCalculatedStart.X; x += (int) defaultDetails.Width)
+                for (var y = (int) oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int) defaultDetails.Height)
                     PickRandomObject(x, y, 0);
         }
 
@@ -198,7 +211,7 @@ namespace AShamanJourney
         {
             if (spawnChance[type] < 1f && GameManager.Random.NextDouble() > spawnChance[type])
                 return null;
-            var range = (float)GameManager.Random.NextDouble() * rndRanges[type];
+            var range = (float) GameManager.Random.NextDouble()*rndRanges[type];
             var currentObjectsList = objectsSpawnRate[type].GetEnumerator();
             SpriteObject objectInfo = null;
             for (var i = 0; range >= 0f && i <= objectsSpawnRate.Count; i++)
@@ -209,21 +222,20 @@ namespace AShamanJourney
             }
 
             //Debug.WriteLine($"Random object: {srange} to {range}, {rndRanges[roomType]} => {enemyInfo.CharacterName}");
-            SpriteObject result = (SpriteObject) objectInfo.Clone();
+            var result = (SpriteObject) objectInfo.Clone();
             result.Name += Utils.RandomString(10); // TODO: calculate this
             //result.Xp = result.LevelManager.levelUpTable[level].NeededXp;
             //result.LevelCheck();
             result.X = x;
             result.Y = y;
-            result.OnDestroy += sender =>
-            {
-                SpawnedObjects[type].Remove((SpriteObject) sender);
-            };
+            result.OnDestroy += sender => { SpawnedObjects[type].Remove((SpriteObject) sender); };
             Engine.SpawnObject(result);
             var player = (Player) Engine.Objects["player"];
-            if (type != 1 && 
-                (x + result.Width >= player.X && x < player.X + player.Width &&
-                 y + result.Height >= player.Y && y < player.Y + player.Height))
+            if (type != 1 &&
+                ((x + result.Width >= player.X && x <= player.X + player.Width &&
+                  y + result.Height >= player.Y && y <= player.Y + player.Height) ||
+                 (x + result.Width >= -200 && x <= 200 &&
+                  y + result.Height >= -200 && y <= 200)))
             {
                 result.Destroy();
                 return null;
