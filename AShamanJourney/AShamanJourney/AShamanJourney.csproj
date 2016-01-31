@@ -36,11 +36,11 @@
   <ItemGroup>
     <Reference Include="aiv-fast2d, Version=1.0.5866.38605, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\aiv-fast2d\aiv-fast2d\bin\Debug\aiv-fast2d.dll</HintPath>
+      <HintPath>..\..\..\aivengine-1\aivengine\bin\Debug\aiv-fast2d.dll</HintPath>
     </Reference>
     <Reference Include="aiv-vorbis, Version=1.0.5864.22892, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\AEngine\AEngine\bin\Debug\aiv-vorbis.dll</HintPath>
+      <HintPath>..\..\..\aivengine-1\aivengine\bin\Debug\aiv-vorbis.dll</HintPath>
     </Reference>
     <Reference Include="aivengine">
       <HintPath>..\..\..\aivengine-1\aivengine\bin\Debug\aivengine.dll</HintPath>
