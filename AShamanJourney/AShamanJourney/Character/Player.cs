@@ -9,10 +9,10 @@ namespace AShamanJourney
     {
         public static readonly Dictionary<string, float> LevelUpModifiers = new Dictionary<string, float>
         {
-            {"attack", 1.1f},
-            {"maxHp", 1.1f},
+            {"attack", 1.2f},
+            {"maxHp", 1.3f},
             {"xpReward", 1.1f},
-            {"speed", 1.1f},
+            {"speed", 1.12f},
             {"xpForNextLevel", 1.2f},
             {"attackSpeed", 1.1f}
         };
@@ -22,7 +22,7 @@ namespace AShamanJourney
 
         public Player(string name, int width, int height) : base(name, width, height, LevelUpModifiers)
         {
-            Stats.MaxHp = 500f;
+            Stats.MaxHp = 3500f;
             Stats.Speed = 250f;
             Stats.Attack = 40f;
             Stats.AttackSpeed = 0.8f;

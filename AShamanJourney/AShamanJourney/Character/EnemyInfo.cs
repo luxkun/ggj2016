@@ -12,11 +12,11 @@ namespace AShamanJourney
 
         private static readonly Dictionary<string, float> LevelUpModifiers = new Dictionary<string, float>
         {
-            {"attack", 0.3f},
-            {"maxHp", 0.2f},
-            {"xpReward", 0.4f},
-            {"speed", 0.1f},
-            {"xpForNextLevel", 0.1f}
+            {"attack", 1.3f},
+            {"maxHp", 1.2f},
+            {"xpReward", 1.4f},
+            {"speed", 1.05f},
+            {"xpForNextLevel", 1.1f}
         };
 
 

@@ -1,4 +1,5 @@
-﻿using Aiv.Engine;
+﻿using System;
+using Aiv.Engine;
 using Aiv.Fast2D;
 
 namespace AShamanJourney
@@ -72,11 +73,15 @@ namespace AShamanJourney
                     var yLen = end.Y - start.Y;
                     int choosenX;
                     int choosenY;
+                    Enemy obj;
                     do
                     {
                         choosenX = (int) (start.X + xLen*GameManager.Random.NextDouble());
                         choosenY = (int) (start.Y + yLen*GameManager.Random.NextDouble());
-                    } while (world.PickRandomObject(choosenX, choosenY, 2) == null);
+                        obj = (Enemy) world.PickRandomObject(choosenX, choosenY, 2);
+                    } while (obj == null);
+                    for (int lvl = 1; lvl < GameManager.Wave; lvl++)
+                        obj.Stats.Xp = obj.Stats.XpForNextLevel;
                 }
             }
         }
