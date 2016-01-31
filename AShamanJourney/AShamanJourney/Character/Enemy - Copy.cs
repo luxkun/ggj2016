@@ -14,7 +14,6 @@ namespace AShamanJourney
         private Vector2 target;
         public float RangeRadius { get; set; }
         private bool goingToPlayer;
-        private float minDiff = 20f;
 
         public Enemy(string name, int width, int height, Dictionary<string, float> levelUpModifiers) : base(name, width, height, levelUpModifiers)
         {
@@ -37,35 +36,29 @@ namespace AShamanJourney
 
             var player = (Player)Engine.Objects["player"];
             if (player.HitBoxes == null) return;
+            Vector2 playerIndex = player.GetHitCenter();
+            Vector2 enemyIndex = new Vector2(X, Y);
+            
+            if (goingToPlayer) // check if the enemy is going to player, after refresh the current player position
+                target = playerIndex;
 
-            NextMove();
-            ManageCollisions();
-        }
+            Vector2 diff = target - enemyIndex;
 
-        private void NextMove()
-        {
-            lastPosition = new Vector2(X, Y);
-            var playerPos = ((Player)Engine.Objects["player"]).GetHitCenter();
-            var pos = GetHitCenter();
-            var diffPlayer = pos - playerPos;
-            if (diffPlayer.LengthFast < RangeRadius*2)
+            if (diff.Length < RangeRadius * 2)
             {
-                target = playerPos;
+                diff.Normalize();
+                diff = diff * Stats.Speed * DeltaTime;
+                enemyIndex.X += diff.X;
+                enemyIndex.Y += diff.Y;
             }
-            var direction = target - pos;
-            if (direction.LengthFast > minDiff)
+            if (diff.Length < 15)  //if the enemy is near target
             {
-                direction.Normalize();
-                direction *= Stats.Speed*DeltaTime;
-                X += direction.X;
-                Y += direction.Y;
-                CalculateMovingState(direction);
-            }
-            else
-            {
-                movingState = MovingState.Idle;
+                X = target.X;
+                Y = target.Y;
+                target = playerIndex;
             }
 
+            ManageCollisions(player);
         }
 
         public override GameObject Clone()
@@ -85,21 +78,17 @@ namespace AShamanJourney
             return go;
         }
 
-        private void ManageCollisions()
+        private void ManageCollisions(Player player)
         {
             foreach (var collision in CheckCollisions())
             {
-                var player = collision.Other as Player;
-                if (player != null) { 
+                if (collision.Other is Player) { 
                     if (Timer.Get("lastHit") <= 0) { 
                         DoDamage(player);
                         Timer.Set("lastHit", Stats.AttackSpeed);
                     }
                 } else
                 {
-                    X = lastPosition.X;
-                    Y = lastPosition.Y;
-                    return;
                     Vector2 diff = new Vector2(X, Y) - new Vector2(collision.Other.X, collision.Other.Y);
                     if ((diff.X > 0 && diff.Y > 0)) 
                         if (X + Width <= collision.Other.X ) //check right collision

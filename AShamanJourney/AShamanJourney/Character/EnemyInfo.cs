@@ -9,9 +9,9 @@ namespace AShamanJourney
 {
     public class EnemyInfo
     {
-        public Enemy bear;
-        public Enemy wolf;
-        public Enemy boar;
+        public static Enemy bear;
+        public static Enemy wolf;
+        public static Enemy boar;
 
         private static readonly Dictionary<string, float> LevelUpModifiers = new Dictionary<string, float>()
         {
@@ -20,40 +20,60 @@ namespace AShamanJourney
         };
 
 
-        public void Enemies(Engine engine)
+        public static void Initialize(Engine engine)
         {
-            bear = new Enemy("bear", 70, 40, LevelUpModifiers);
-            bear.Stats.Hp = 150f;
-            bear.Stats.MaxHp = 200f;
-            bear.Stats.Speed = 600f;
-            bear.Stats.Attack = 90f;
-            bear.Stats.XpForNextLevel = 105;
-            bear.radius = 100f;
+            bear = new Enemy("bear", 70, 40, LevelUpModifiers)
+            {
+                Stats =
+                {
+                    Hp = 150f,
+                    MaxHp = 200f,
+                    Speed = 100f,
+                    Attack = 90f,
+                    XpForNextLevel = 105,
+                    AttackSpeed = 1.3f
+                },
+                RangeRadius = 1000f
+            };
 
-            wolf = new Enemy("wolf", 50, 20, LevelUpModifiers);
-            wolf.Stats.Hp = 90f;
-            wolf.Stats.MaxHp = 180f;
-            wolf.Stats.Speed = 400f;
-            wolf.Stats.Attack = 100f;
-            wolf.Stats.XpForNextLevel = 60;
-            wolf.radius = 100f;
+            wolf = new Enemy("wolf", 50, 20, LevelUpModifiers)
+            {
+                Stats =
+                {
+                    Hp = 90f,
+                    MaxHp = 180f,
+                    Speed = 150f,
+                    Attack = 100f,
+                    XpForNextLevel = 60,
+                    AttackSpeed = 1f
+                },
+                RangeRadius = 1000f
+            };
 
-            boar = new Enemy("boar", 60, 30, LevelUpModifiers);
-            boar.Stats.Hp = 200f;
-            boar.Stats.MaxHp = 150f;
-            boar.Stats.Speed = 450f;
-            boar.Stats.Attack = 140f;
-            boar.Stats.XpForNextLevel = 90;
-            boar.radius = 100f;
+            boar = new Enemy("boar", 60, 30, LevelUpModifiers)
+            {
+                Stats =
+                {
+                    Hp = 200f,
+                    MaxHp = 150f,
+                    Speed = 100f,
+                    Attack = 140f,
+                    XpForNextLevel = 90,
+                    AttackSpeed = 1.3f
+                },
+                RangeRadius = 1000f
+            };
+
+            AddAnimations(engine);
         }
 
-        private void AddAnimations()
+        private static void AddAnimations(Engine engine)
         {
-            bear.AddAnimation("idle", Utils.GetAssetName("bear", 0, 0, 1), 5);
-            bear.AddAnimation("movingLeft", Utils.GetAssetName("bear", 0, 1, 3), 5);
-            bear.AddAnimation("movingRight", Utils.GetAssetName("bear", 0, 2, 3), 5);
-            bear.AddAnimation("movingUp", Utils.GetAssetName("bear", 0, 3, 3), 5);
-            bear.AddAnimation("movingDown", Utils.GetAssetName("bear", 0, 0, 3), 5);
+            bear.AddAnimation("idle", Utils.GetAssetName("bear", 0, 0), 5, engine);
+            bear.AddAnimation("movingLeft", Utils.GetAssetName("bear", 0, 1, 3), 5, engine);
+            bear.AddAnimation("movingRight", Utils.GetAssetName("bear", 0, 2, 3), 5, engine);
+            bear.AddAnimation("movingUp", Utils.GetAssetName("bear", 0, 3, 3), 5, engine);
+            bear.AddAnimation("movingDown", Utils.GetAssetName("bear", 0, 0, 3), 5, engine);
         }
     }
 }
