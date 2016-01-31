@@ -47,12 +47,13 @@ namespace AShamanJourney
             boar.radius = 100f;
         }
 
-        //private void AddAnimations()
-        //{
-        //    AddAnimation("movingDown", Utils.GetAssetName("bear", 0, 0, 2, 0), 3);
-        //    AddAnimation("movingLeft", Utils.GetAssetName("bear", 0, 1, 0), 3);
-        //    AddAnimation("movingRight", Utils.GetAssetName("bear", 0, 2, 0), 3);
-        //    AddAnimation("movingUp", Utils.GetAssetName("bear", 0, 3, 0), 3);
-        //}
+        private void AddAnimations()
+        {
+            bear.AddAnimation("idle", Utils.GetAssetName("bear", 0, 0, 1), 5);
+            bear.AddAnimation("movingLeft", Utils.GetAssetName("bear", 0, 1, 3), 5);
+            bear.AddAnimation("movingRight", Utils.GetAssetName("bear", 0, 2, 3), 5);
+            bear.AddAnimation("movingUp", Utils.GetAssetName("bear", 0, 3, 3), 5);
+            bear.AddAnimation("movingDown", Utils.GetAssetName("bear", 0, 0, 3), 5);
+        }
     }
 }
