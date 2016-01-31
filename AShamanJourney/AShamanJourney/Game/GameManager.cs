@@ -124,9 +124,12 @@ namespace AShamanJourney
             engine.LoadAsset("qteContainer", new SpriteAsset("QteContainer.png"));
 
             // animals (enemies)
-            Utils.LoadAnimation(engine, "bear", "bear.png", 3, 4);
             Utils.LoadAnimation(engine, "wolf", "wolf.png", 3, 4);
             Utils.LoadAnimation(engine, "rhyno", "rhyno.png", 3, 4);
+            Utils.LoadAnimation(engine, "bearLeft", "bearLeft.png", 2, 2);
+            Utils.LoadAnimation(engine, "bearDown", "bearDown.png", 2, 2);
+            Utils.LoadAnimation(engine, "bearUp", "bearUp.png", 2, 2);
+            Utils.LoadAnimation(engine, "bearRight", "bearRight.png", 2, 2);
 
             // SOUND
             engine.LoadAsset("sound_soundtrack", new AudioAsset("sound/soundtrack.ogg"));

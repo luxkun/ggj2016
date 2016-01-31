@@ -72,11 +72,19 @@ namespace AShamanJourney
 
         private static void AddAnimations(Engine engine)
         {
-            bear.AddAnimation("idle", Utils.GetAssetName("bear", 0, 0), 5, engine);
-            bear.AddAnimation("movingLeft", Utils.GetAssetName("bear", 0, 1, 3), 5, engine);
-            bear.AddAnimation("movingRight", Utils.GetAssetName("bear", 0, 2, 3), 5, engine);
-            bear.AddAnimation("movingUp", Utils.GetAssetName("bear", 0, 3, 3), 5, engine);
-            bear.AddAnimation("movingDown", Utils.GetAssetName("bear", 0, 0, 3), 5, engine);
+            bear.AddAnimation("idle", Utils.GetAssetName("bearDown", 0, 0), 5, engine);
+            var bearAssets = Utils.GetAssetName("bearLeft", 0, 0, 2);
+            bearAssets.AddRange(Utils.GetAssetName("bearLeft", 0, 1));
+            bear.AddAnimation("movingLeft", bearAssets, 5, engine);
+            bearAssets = Utils.GetAssetName("bearRight", 0, 0, 2);
+            bearAssets.AddRange(Utils.GetAssetName("bearRight", 1, 1));
+            bear.AddAnimation("movingRight", bearAssets, 5, engine);
+            bearAssets = Utils.GetAssetName("bearUp", 0, 0, 2);
+            bearAssets.AddRange(Utils.GetAssetName("bearUp", 0, 1));
+            bear.AddAnimation("movingUp", bearAssets, 5, engine);
+            bearAssets = Utils.GetAssetName("bearDown", 0, 0, 2);
+            bearAssets.AddRange(Utils.GetAssetName("bearDown", 0, 1));
+            bear.AddAnimation("movingDown", bearAssets, 5, engine);
 
             wolf.AddAnimation("idle", Utils.GetAssetName("wolf", 0, 0), 5, engine);
             wolf.AddAnimation("movingLeft", Utils.GetAssetName("wolf", 0, 1, 3), 5, engine);
