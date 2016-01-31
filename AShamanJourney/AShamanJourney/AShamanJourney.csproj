@@ -67,6 +67,7 @@
     <Compile Include="Character\Character.cs" />
     <Compile Include="Character\Damage.cs" />
     <Compile Include="Character\DropManager.cs" />
+    <None Include="Character\Enemy - Copy.cs" />
     <Compile Include="Character\Enemy.cs" />
     <Compile Include="Character\EnemyInfo.cs" />
     <Compile Include="Game\Hud.cs" />

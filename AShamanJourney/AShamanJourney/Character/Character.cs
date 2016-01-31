@@ -151,7 +151,7 @@ namespace AShamanJourney
             LastHitCharacter = enemy;
             Stats.Hp -= dmg;
 
-            var floatingText = new FloatingText(this, "-" + (int)dmg, Color.Orange, 0.6f + dmg / 300f);
+            var floatingText = new FloatingText(this, "-" + (int)dmg, Color.White, 0.4f + dmg / 300f);
             Engine.SpawnObject(
                 floatingText.Name, floatingText
                 );

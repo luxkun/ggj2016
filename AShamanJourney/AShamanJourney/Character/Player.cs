@@ -23,8 +23,8 @@ namespace AShamanJourney
 
         public Player(string name, int width, int height) : base(name, width, height, LevelUpModifiers)
         {
-            Stats.Hp = 100f;
-            Stats.MaxHp = 100f;
+            Stats.Hp = 1000f;
+            Stats.MaxHp = 1000f;
             Stats.Speed = 250f;
             Stats.Attack = 100f;
             Stats.AttackSpeed = 0.8f;

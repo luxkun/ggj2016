@@ -10,6 +10,9 @@ namespace AShamanJourney
     {
         private static Engine engine;
         public static string MainWindow { get; set; }
+
+        public static int Wave { get; set; }
+
         //static GameManager()
         public static void Initialize()
         {
@@ -94,12 +97,9 @@ namespace AShamanJourney
             Asset.BasePath = "../../assets";
             //Utils.LoadAnimation(engine, "player", "player_sheet.png", 10, 10);
             // enemies
-            engine.LoadAsset("bear", new SpriteAsset("bear.png"));
-
-            engine.LoadAsset("player", new SpriteAsset("player.png"));
             Utils.LoadAnimation(engine, "playerIdle", "playerIdle.png", 7, 1);
             Utils.LoadAnimation(engine, "playerMovingDown", "playerMovingDown.png", 4, 2);
-            Utils.LoadAnimation(engine, "playerShootingDown", "playerShootingDown.png",4,2);
+            Utils.LoadAnimation(engine, "playerShootingDown", "playerShootingDown.png", 4, 2);
 
             engine.LoadAsset("background0", new SpriteAsset("background0.png"));
             engine.LoadAsset("swamp0", new SpriteAsset("swamp0.png"));
@@ -121,12 +121,13 @@ namespace AShamanJourney
             engine.LoadAsset("qteContainer", new SpriteAsset("QteContainer.png"));
 
             // bear
-            Utils.LoadAnimation(engine, "bear", "BearAsset2.png", 3, 4);
-
+            Utils.LoadAnimation(engine, "bear", "bear.png", 3, 4);
         }
 
         public static void Run()
         {
+            EnemyInfo.Initialize(engine);
+
             var hud = new Hud();
             engine.SpawnObject("hud", hud);
 
@@ -144,7 +145,7 @@ namespace AShamanJourney
             };
             cameraManager.Order = 99;
             engine.SpawnObject("cameraManager", cameraManager);
-
+            
             engine.Run();
         }
     }

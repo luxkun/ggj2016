@@ -14,8 +14,8 @@ namespace AShamanJourney
         private readonly List<float> spawnChance; 
         private readonly List<float> rndRanges;
 
-        private Vector2 calculatedStart;
-        private Vector2 calculatedEnd;
+        public Vector2 calculatedStart;
+        public Vector2 calculatedEnd;
         // virtual size/2 of the open world
         private Vector2 maxPosition;
 
@@ -32,7 +32,7 @@ namespace AShamanJourney
             };
             spawnChance = new List<float>()
             {
-                0.2f, 1f, 0.1f
+                0.05f, 1f, 1f
             };
             rndRanges = new List<float>();
         }
@@ -85,13 +85,9 @@ namespace AShamanJourney
 
             // enemies
             objectsSpawnRate.Add(new Dictionary<GameObject, float>());
-            var bearAsset = (SpriteAsset)Engine.GetAsset("bear");
-            var bear = new SpriteObject(bearAsset.Width, bearAsset.Height)
-            {
-                Name = "bear0",
-                CurrentSprite = bearAsset,
-                Order = 6
-            };
+            var bear = EnemyInfo.bear;
+            bear.Name = "bear0";
+            bear.Order = 6;
             objectsSpawnRate[2][bear] = 1f;
 
             var count = 0;
@@ -163,21 +159,21 @@ namespace AShamanJourney
 
             // SPAWN ENEMIES
             // 1
-            for (int x = (int)calculatedStart.X; x < calculatedEnd.X; x += (int)defaultBackground.Width)
-                for (int y = (int)calculatedStart.Y; y < oldCalculatedStart.Y; y += (int)defaultBackground.Height)
-                    PickRandomObject(x, y, 2);
-            // 2
-            for (int x = (int)oldCalculatedEnd.X; x < calculatedEnd.X; x += (int)defaultBackground.Width)
-                for (int y = (int)oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
-                    PickRandomObject(x, y, 2);
-            // 3
-            for (int x = (int)oldCalculatedStart.X; x < oldCalculatedEnd.X; x += (int)defaultBackground.Width)
-                for (int y = (int)oldCalculatedEnd.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
-                    PickRandomObject(x, y, 2);
-            // 4
-            for (int x = (int)calculatedStart.X; x < oldCalculatedStart.X; x += (int)defaultBackground.Width)
-                for (int y = (int)oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
-                    PickRandomObject(x, y, 2);
+            //for (int x = (int)calculatedStart.X; x < calculatedEnd.X; x += (int)defaultBackground.Width)
+            //    for (int y = (int)calculatedStart.Y; y < oldCalculatedStart.Y; y += (int)defaultBackground.Height)
+            //        PickRandomObject(x, y, 2);
+            //// 2
+            //for (int x = (int)oldCalculatedEnd.X; x < calculatedEnd.X; x += (int)defaultBackground.Width)
+            //    for (int y = (int)oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
+            //        PickRandomObject(x, y, 2);
+            //// 3
+            //for (int x = (int)oldCalculatedStart.X; x < oldCalculatedEnd.X; x += (int)defaultBackground.Width)
+            //    for (int y = (int)oldCalculatedEnd.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
+            //        PickRandomObject(x, y, 2);
+            //// 4
+            //for (int x = (int)calculatedStart.X; x < oldCalculatedStart.X; x += (int)defaultBackground.Width)
+            //    for (int y = (int)oldCalculatedStart.Y; y < calculatedEnd.Y; y += (int)defaultBackground.Height)
+            //        PickRandomObject(x, y, 2);
 
             // SPAWN RANDOM OBJECTS
             // 1
@@ -198,7 +194,7 @@ namespace AShamanJourney
                     PickRandomObject(x, y, 0);
         }
 
-        private GameObject PickRandomObject(int x, int y, int type)
+        public GameObject PickRandomObject(int x, int y, int type)
         {
             if (spawnChance[type] < 1f && GameManager.Random.NextDouble() > spawnChance[type])
                 return null;
@@ -211,6 +207,7 @@ namespace AShamanJourney
                 range -= currentObjectsList.Current.Value;
                 objectInfo = currentObjectsList.Current.Key;
             }
+
 
             //Debug.WriteLine($"Random object: {srange} to {range}, {rndRanges[roomType]} => {enemyInfo.CharacterName}");
             var result = objectInfo.Clone();
