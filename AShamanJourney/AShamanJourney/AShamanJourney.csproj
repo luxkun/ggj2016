@@ -70,6 +70,7 @@
     <None Include="Character\Enemy - Copy.cs" />
     <Compile Include="Character\Enemy.cs" />
     <Compile Include="Character\EnemyInfo.cs" />
+    <Compile Include="Game\CameraManager.cs" />
     <Compile Include="Game\Hud.cs" />
     <Compile Include="Ritual\Bullet.cs" />
     <Compile Include="Ritual\Minion.cs" />
@@ -94,8 +95,16 @@
     <Content Include="assets\ArcadeFont.png" />
     <Content Include="assets\background0.png" />
     <Content Include="assets\bear.png" />
-    <Content Include="assets\details0.png" />
+    <Content Include="assets\demoniacMinion.png" />
+    <Content Include="assets\lifeMinion.png" />
     <Content Include="assets\player.png" />
+    <Content Include="assets\player\idle.png" />
+    <Content Include="assets\player\movingDown.png" />
+    <Content Include="assets\player\movingLeft.png" />
+    <Content Include="assets\player\movingRight.png" />
+    <Content Include="assets\player\movingUp.png" />
+    <Content Include="assets\player\shottingDown.png" />
+    <Content Include="assets\player\shottingUp.png" />
     <Content Include="assets\swamp0.png" />
     <Content Include="assets\tree0.png" />
     <Content Include="openal32.dll">

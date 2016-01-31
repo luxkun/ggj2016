@@ -23,14 +23,16 @@ namespace AShamanJourney
 
         public Player(string name, int width, int height) : base(name, width, height, LevelUpModifiers)
         {
-            Stats.Hp = 1000f;
-            Stats.MaxHp = 1000f;
+            Stats.Hp = 500f;
+            Stats.MaxHp = 500f;
             Stats.Speed = 250f;
-            Stats.Attack = 100f;
+            Stats.Attack = 40f;
             Stats.AttackSpeed = 0.8f;
             Stats.XpForNextLevel = 100;
             Stats.RangedSpeed = 300f;
             Order = 9;
+
+            bulletHitMask = (Collision collision) => !(collision.Other is Player);
         }
 
         public override void Start()
@@ -46,22 +48,44 @@ namespace AShamanJourney
             OnXpChanged += (sender, delta) => hud.UpdateXp((Player) sender);
             hud.UpdateHp(this);
             hud.UpdateXp(this);
+
+            bulletAsset = (SpriteAsset)Engine.GetAsset("genericBullet");
         }
 
         private void LoadAnimations()
         {
-            AddAnimation("idle", Utils.GetAssetName("playerIdle", 0, 0, 7), 8);
-            AddAnimation("movingLeft", Utils.GetAssetName("playerIdle", 0, 0, 7), 15);
-            AddAnimation("movingRight", Utils.GetAssetName("playerIdle", 0, 0, 7), 15);
-            AddAnimation("movingDown", Utils.GetAssetName("playerMovingDown", 0, 0, 4, 2), 15);
-            AddAnimation("movingUp", Utils.GetAssetName("playerIdle", 0, 0, 7), 15);
-            //AddAnimation("shootingDown", Utils.GetAssetName("playerShootingDown", 0, 0, 7), 15);
+            var fps0 = 8;
+            var fps1 = 12;
+
+            var idle = Utils.GetAssetName("playerIdle", 0, 0, 4);
+            idle.AddRange(Utils.GetAssetName("playerIdle", 0, 1, 3));
+            AddAnimation("idle", idle, fps0);
+
+            var movingLeft = Utils.GetAssetName("playerMovingLeft", 0, 0, 4);
+            movingLeft.AddRange(Utils.GetAssetName("playerMovingLeft", 0, 1));
+            AddAnimation("movingLeft", movingLeft, fps0);
+
+            var movingRight = Utils.GetAssetName("playerMovingRight", 0, 0, 4);
+            movingRight.AddRange(Utils.GetAssetName("playerMovingRight", 3, 1));
+            AddAnimation("movingRight", movingRight, fps0);
+
+            var movingDown = Utils.GetAssetName("playerMovingDown", 0, 0, 4);
+            movingDown.AddRange(Utils.GetAssetName("playerMovingDown", 0, 1, 3));
+            AddAnimation("movingDown", movingDown, fps1);
+
+            var movingUp = Utils.GetAssetName("playerMovingUp", 0, 0, 4);
+            movingUp.AddRange(Utils.GetAssetName("playerMovingUp", 0, 1, 3));
+            AddAnimation("movingUp", movingUp, fps1);
+            //AddAnimation("shottingLeft", Utils.GetAssetName("playerIdle", 0, 0, 7), 15);
+            //AddAnimation("shottingRight", Utils.GetAssetName("playerIdle", 0, 0, 7), 15);
+            //AddAnimation("shottingDown", Utils.GetAssetName("playerMovingDown", 0, 0, 4, 2), 15);
+            //AddAnimation("shottingUp", Utils.GetAssetName("playerMovingUp", 0, 0, 7), 15);
         }
 
         public override void Update()
         {
             base.Update();
-            if (GameManager.MainWindow != "game") return;
+            if (GameManager.MainWindow != "game" || Engine.TimeModifier != 1f) return;
             ManageInput();
             ManageCollisions();
         }
@@ -114,6 +138,20 @@ namespace AShamanJourney
             {
                 movingState = MovingState.Idle;
             }
+
+            var shottingDirection = new Vector2();
+            if (Engine.IsKeyDown(KeyCode.Right))
+                shottingDirection.X = 1f;
+            if (Engine.IsKeyDown(KeyCode.Left))
+                shottingDirection.X = -1f;
+            if (Engine.IsKeyDown(KeyCode.Up))
+                shottingDirection.Y = -1f;
+            if (Engine.IsKeyDown(KeyCode.Down))
+                shottingDirection.Y = 1f;
+            if (shottingDirection.LengthFast > 0.2f)
+            {
+                Shot(shottingDirection);
+            }
         }
 
         private bool ManageCollisions()
@@ -121,10 +159,13 @@ namespace AShamanJourney
             bool collided = false;
             foreach (var collision in CheckCollisions())
             {
-                if (!(collision.Other is Ritual) && InCollision > maxCollisions)
+                if (!(collision.Other is Ritual) && !(collision.Other is Enemy))// && InCollision > maxCollisions)
                     collided = true;
             }
-            if (collided)
+            var world = (World) Engine.Objects["world"];
+            if (collided ||
+                X < world.calculatedStart.X || Y < world.calculatedStart.Y ||
+                X + Width > world.calculatedEnd.X || Y + Height > world.calculatedEnd.Y)
             {
                 InCollision++;
                 X = lastPosition.X;

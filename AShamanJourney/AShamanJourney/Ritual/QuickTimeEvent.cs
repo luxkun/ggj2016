@@ -46,8 +46,8 @@ namespace AShamanJourney
             base.Start();
             Engine.TimeModifier = 0f;
 
-            speed = 250f + GameManager.GlobalTimer/60f;
-            KeyPadding = 250f - GameManager.GlobalTimer / 60f * 3f;
+            speed = 450f + GameManager.GlobalTimer/10f;
+            KeyPadding = 250f;
 
             QteLogo0 = new TextObject(3f, Color.Crimson)
             {
@@ -148,7 +148,6 @@ namespace AShamanJourney
             {
                 if (Engine.IsKeyDown(key))
                 {
-                    Console.WriteLine(key);
                     pressedKeys.Add(KeyToText(key));
                 }
             }
@@ -165,7 +164,8 @@ namespace AShamanJourney
                     qteList[0].Y = Engine.Height - qteList[0].Measure().Y - Padding;
                     CurrentKey = qteList[0];
                 }
-                if (pressedKeys.Contains(qteList[0].Text)) { 
+                if (pressedKeys.Contains(qteList[0].Text))
+                {
                     CurrentKey.Destroy();
                     CurrentKey = null;
                     qteList.RemoveAt(0);
@@ -175,6 +175,11 @@ namespace AShamanJourney
                         Success = true;
                         Destroy();
                     }
+                }
+                else if (pressedKeys.Count > 0)
+                {
+                    Success = false;
+                    Destroy();
                 }
             }
             else if (canFail) // failed hard

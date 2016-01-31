@@ -9,8 +9,8 @@ namespace AShamanJourney
 {
     internal class World : GameObject
     {
-        private readonly List<Dictionary<GameObject, float>> objectsSpawnRate;
-        public static List<List<GameObject>> SpawnedObjects;
+        private readonly List<Dictionary<SpriteObject, float>> objectsSpawnRate;
+        public static List<List<SpriteObject>> SpawnedObjects;
         private readonly List<float> spawnChance; 
         private readonly List<float> rndRanges;
 
@@ -25,14 +25,14 @@ namespace AShamanJourney
             calculatedEnd = Vector2.Zero;
             maxPosition = Vector2.Zero;
 
-            objectsSpawnRate = new List<Dictionary<GameObject, float>>();
-            SpawnedObjects = new List<List<GameObject>>
+            objectsSpawnRate = new List<Dictionary<SpriteObject, float>>();
+            SpawnedObjects = new List<List<SpriteObject>>
             {
-                new List<GameObject>(), new List<GameObject>(), new List<GameObject>()
+                new List<SpriteObject>(), new List<SpriteObject>(), new List<SpriteObject>()
             };
             spawnChance = new List<float>()
             {
-                0.05f, 1f, 1f
+                0.3f, 1f, 1f
             };
             rndRanges = new List<float>();
         }
@@ -49,7 +49,7 @@ namespace AShamanJourney
             //Engine.SpawnObject("backgroundMask", backgroundMask);
 
             // details
-            objectsSpawnRate.Add(new Dictionary<GameObject, float>());
+            objectsSpawnRate.Add(new Dictionary<SpriteObject, float>());
             var swamp0Asset = (SpriteAsset)Engine.GetAsset("swamp0");
             var swamp0 = new SpriteObject(swamp0Asset.Width, swamp0Asset.Height, true)
             {
@@ -62,18 +62,18 @@ namespace AShamanJourney
             var tree0AssetTop = (SpriteAsset)Engine.GetAsset("tree0_top");
             var tree0AssetBottom = (SpriteAsset)Engine.GetAsset("tree0_bottom");
             var tree0 = new TruncatedObject("tree0", tree0AssetBottom, tree0AssetTop) {Order = 2};
-            objectsSpawnRate[0][tree0] = 2f;
+            objectsSpawnRate[0][tree0] = 3f;
 
             var ritualAsset = (SpriteAsset) Engine.GetAsset("ritual0_0_0");
             var ritual0 = new Ritual(ritualAsset.Width, ritualAsset.Height, Ritual.RitualType.Demoniac) {Order = 2};
             var ritual1 = new Ritual(ritualAsset.Width, ritualAsset.Height, Ritual.RitualType.Earth) {Order = 2};
             var ritual2 = new Ritual(ritualAsset.Width, ritualAsset.Height, Ritual.RitualType.Life) {Order = 2};
+            objectsSpawnRate[0][ritual2] = 0.3f;
             objectsSpawnRate[0][ritual0] = 0.1f;
             objectsSpawnRate[0][ritual1] = 0.1f;
-            objectsSpawnRate[0][ritual2] = 0.1f;
 
             // backgrounds
-            objectsSpawnRate.Add(new Dictionary<GameObject, float>());
+            objectsSpawnRate.Add(new Dictionary<SpriteObject, float>());
             var background0Asset = (SpriteAsset)Engine.GetAsset("background0");
             var background0 = new SpriteObject(background0Asset.Width, background0Asset.Height)
             {
@@ -84,7 +84,7 @@ namespace AShamanJourney
             objectsSpawnRate[1][background0] = 1f;
 
             // enemies
-            objectsSpawnRate.Add(new Dictionary<GameObject, float>());
+            objectsSpawnRate.Add(new Dictionary<SpriteObject, float>());
             var bear = EnemyInfo.bear;
             bear.Name = "bear0";
             bear.Order = 6;
@@ -194,13 +194,13 @@ namespace AShamanJourney
                     PickRandomObject(x, y, 0);
         }
 
-        public GameObject PickRandomObject(int x, int y, int type)
+        public SpriteObject PickRandomObject(int x, int y, int type)
         {
             if (spawnChance[type] < 1f && GameManager.Random.NextDouble() > spawnChance[type])
                 return null;
             var range = (float)GameManager.Random.NextDouble() * rndRanges[type];
             var currentObjectsList = objectsSpawnRate[type].GetEnumerator();
-            GameObject objectInfo = null;
+            SpriteObject objectInfo = null;
             for (var i = 0; range >= 0f && i <= objectsSpawnRate.Count; i++)
             {
                 currentObjectsList.MoveNext();
@@ -208,16 +208,22 @@ namespace AShamanJourney
                 objectInfo = currentObjectsList.Current.Key;
             }
 
-
             //Debug.WriteLine($"Random object: {srange} to {range}, {rndRanges[roomType]} => {enemyInfo.CharacterName}");
-            var result = objectInfo.Clone();
+            SpriteObject result = (SpriteObject) objectInfo.Clone();
             result.Name += Utils.RandomString(10); // TODO: calculate this
             //result.Xp = result.LevelManager.levelUpTable[level].NeededXp;
             //result.LevelCheck();
             result.X = x;
             result.Y = y;
+            result.OnDestroy += sender =>
+            {
+                SpawnedObjects[type].Remove((SpriteObject) sender);
+            };
             Engine.SpawnObject(result);
-            if (result.HasCollisions())
+            var player = (Player) Engine.Objects["player"];
+            if (type != 1 && 
+                (x + result.Width >= player.X && x < player.X + player.Width &&
+                 y + result.Height >= player.Y && y < player.Y + player.Height))
             {
                 result.Destroy();
                 return null;

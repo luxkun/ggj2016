@@ -19,6 +19,7 @@ namespace AShamanJourney
         public Enemy(string name, int width, int height, Dictionary<string, float> levelUpModifiers) : base(name, width, height, levelUpModifiers)
         {
             goingToPlayer = true;
+            Opacity = 0.5f;
         }
 
         public override void Start()
@@ -34,9 +35,14 @@ namespace AShamanJourney
         {
             base.Update();
             if (GameManager.MainWindow != "game") return;
+            if (HitBoxes == null) return;
 
             var player = (Player)Engine.Objects["player"];
             if (player.HitBoxes == null) return;
+
+            // sorry god of programmers, I'm really sorry.
+            if (Stats.Hp <= 0)
+                Destroy();
 
             NextMove();
             ManageCollisions();
@@ -90,15 +96,16 @@ namespace AShamanJourney
             foreach (var collision in CheckCollisions())
             {
                 var player = collision.Other as Player;
-                if (player != null) { 
+                if (player != null)
+                {
+                    X = lastPosition.X;
+                    Y = lastPosition.Y;
                     if (Timer.Get("lastHit") <= 0) { 
                         DoDamage(player);
                         Timer.Set("lastHit", Stats.AttackSpeed);
                     }
                 } else
                 {
-                    X = lastPosition.X;
-                    Y = lastPosition.Y;
                     return;
                     Vector2 diff = new Vector2(X, Y) - new Vector2(collision.Other.X, collision.Other.Y);
                     if ((diff.X > 0 && diff.Y > 0)) 

@@ -30,9 +30,9 @@ namespace AShamanJourney
         public Character Enemy { get; set; }
 
         public Character Character { get; set; }
-        public float KnockBack { get; set; }
+        public float KnockBack { get; set; } = 20f;
 
-        public float Caculate(Character character, Character enemy)
+        public float Calculate(Character character, Character enemy)
         {
             return DamageFunc(character, enemy);
         }

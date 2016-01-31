@@ -11,7 +11,7 @@
 
         public void DropAndSpawn(Character lastHitCharacter)
         {
-            throw new System.NotImplementedException();
+            //throw new System.NotImplementedException();
         }
     }
 }

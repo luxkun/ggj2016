@@ -23,8 +23,8 @@ namespace AShamanJourney
         public override void Start()
         {
             base.Start();
-            AddAnimation("idle",  Utils.GetAssetName($"ritual{(int)ritualType}", 0, 0), 4);
-            AddAnimation("burning", Utils.GetAssetName($"ritual{(int)ritualType}", 1, 0, 4),4);
+            AddAnimation("idle",  Utils.GetAssetName($"ritual{(int)ritualType}", 0, 0), 8);
+            AddAnimation("burning", Utils.GetAssetName($"ritual{(int)ritualType}", 1, 0, 4), 8);
             CurrentAnimation = "idle";
         }
 

@@ -9,6 +9,10 @@ namespace AShamanJourney
 {
     public class Character : SpriteObject
     {
+        protected Func<Collision, bool> bulletHitMask = collision => true;
+        protected SpriteAsset bulletAsset;
+        private int bulletCounter = 0;
+
         public delegate void DamageTakenEventHandler(object sender, float delta);
 
         public delegate void HpChangedEventHandler(object sender);
@@ -105,6 +109,23 @@ namespace AShamanJourney
             }
         }
 
+
+        protected void Shot(Vector2 direction)
+        {
+            if (Timer.Get("shotTimer") <= 0)
+            {
+                Timer.Set("shotTimer", Stats.AttackSpeed);
+                var bullet = new Bullet(
+                    this, bulletAsset, direction, bulletHitMask)
+                {
+                    Scale = new Vector2(0.33f, 0.33f)
+                };
+                bullet.X = X + Width/2 - bullet.Width / 2;
+                bullet.Y = Y + Height/ 2 - bullet.Height / 2;
+                Engine.SpawnObject($"{Name}_bullet{bulletCounter}", bullet);
+            }
+        }
+
         public Vector2 GetHitCenter()
         {
             return new Vector2(
@@ -146,7 +167,7 @@ namespace AShamanJourney
         {
             LevelCheck(); // could happen that the player kills the enemy before he fully spawn (before Start "starts")
             enemy.LevelCheck();
-            var dmg = damage.Caculate(this, enemy);
+            var dmg = damage.Calculate(this, enemy);
 
             LastHitCharacter = enemy;
             Stats.Hp -= dmg;
@@ -189,7 +210,6 @@ namespace AShamanJourney
                 movingState = y >= 0 ? MovingState.MovingDown : MovingState.MovingUp;
             else
                 movingState = x >= 0 ? MovingState.MovingRight : MovingState.MovingLeft;
-            // TODO: change currentanimation
             if (Animations != null && Animations.Count > 0)
             {
                 switch (movingState)

@@ -97,9 +97,14 @@ namespace AShamanJourney
             Asset.BasePath = "../../assets";
             //Utils.LoadAnimation(engine, "player", "player_sheet.png", 10, 10);
             // enemies
-            Utils.LoadAnimation(engine, "playerIdle", "playerIdle.png", 7, 1);
-            Utils.LoadAnimation(engine, "playerMovingDown", "playerMovingDown.png", 4, 2);
-            Utils.LoadAnimation(engine, "playerShootingDown", "playerShootingDown.png", 4, 2);
+            engine.LoadAsset("genericBullet", new SpriteAsset("singleBullet.png"));
+            Utils.LoadAnimation(engine, "playerIdle", "player/idle.png", 4, 2);
+            Utils.LoadAnimation(engine, "playerMovingUp", "player/movingUp.png", 4, 2);
+            Utils.LoadAnimation(engine, "playerMovingDown", "player/movingDown.png", 4, 2);
+            Utils.LoadAnimation(engine, "playerMovingLeft", "player/movingLeft.png", 4, 2);
+            Utils.LoadAnimation(engine, "playerMovingRight", "player/movingRight.png", 4, 2);
+            //Utils.LoadAnimation(engine, "playerShottingUp", "player/shottingUp.png", 4, 2);
+            //Utils.LoadAnimation(engine, "playerShootingDown", "player/shottingDown.png", 4, 2);
 
             engine.LoadAsset("background0", new SpriteAsset("background0.png"));
             engine.LoadAsset("swamp0", new SpriteAsset("swamp0.png"));
@@ -109,11 +114,8 @@ namespace AShamanJourney
 
             // enemies
             Utils.LoadAnimation(engine, "earthMinion", "earthMinion.png", 4, 4);
-            engine.LoadAsset("earthMinionBullet", new SpriteAsset("singleBullet.png"));
-            //Utils.LoadAnimation(engine, "lifeMinion", "lifeMinion.png", 4, 4);
-            //engine.LoadAsset("lifeMinionBullet", new SpriteAsset("singleBullet.png"));
-            //Utils.LoadAnimation(engine, "demoniacMinion", "demoniacMinion.png", 4, 4);
-            //engine.LoadAsset("demoniacMinionBullet", new SpriteAsset("singleBullet.png"));
+            Utils.LoadAnimation(engine, "demoniacMinion", "demoniacMinion.png", 4, 4);
+            Utils.LoadAnimation(engine, "lifeMinion", "lifeMinion.png", 4, 4);
 
             Utils.LoadAnimation(engine, "ritual0", "ritual0.png", 5, 1);
             Utils.LoadAnimation(engine, "ritual1", "ritual1.png", 5, 1);
@@ -135,14 +137,7 @@ namespace AShamanJourney
             engine.SpawnObject("game", game);
 
             var player = (Player) engine.Objects["player"];
-            var cameraManager = new GameObject();
-            cameraManager.OnUpdate += sender =>
-            {
-                var cameraX = player.X - player.Width / 2 - engine.Width/2;
-                var cameraY = player.Y - player.Height / 2 - engine.Height/2;
-                engine.Camera.X = cameraX;
-                engine.Camera.Y = cameraY;
-            };
+            var cameraManager = new CameraManager();
             cameraManager.Order = 99;
             engine.SpawnObject("cameraManager", cameraManager);
             

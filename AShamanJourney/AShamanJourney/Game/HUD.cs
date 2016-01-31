@@ -21,6 +21,7 @@ namespace AShamanJourney
         private TextObject hpNumber;
         private TextObject xpNumber;
         private TextObject wave;
+        private TextObject waveTimer;
 
         private RectangleObject hpBar;
         private RectangleObject xpBar;
@@ -41,7 +42,9 @@ namespace AShamanJourney
             timer = new TextObject(fontSize, Color.BurlyWood);
             timer.Order = 10;
             wave = new TextObject(fontSize, Color.BlanchedAlmond);
-            timer.Order = 10;
+            wave.Order = 10;
+            waveTimer = new TextObject(fontSize, Color.Beige);
+            waveTimer.Order = 10;
             hpNumber = new TextObject(fontSize / 2, Color.DarkGray);
             hpNumber.Order = 11;
             xpNumber = new TextObject(fontSize / 2, Color.DarkGray);
@@ -78,9 +81,9 @@ namespace AShamanJourney
             //WAVE
             Engine.SpawnObject("wave", wave);
             wave.IgnoreCamera = true;
-            wave.X = Engine.Width - (wave.Measure().X + InnerPadding);
-            wave.Y = Padding;
-            wave.Text = $"Wave 0";
+
+            Engine.SpawnObject("waveTimer", waveTimer);
+            waveTimer.IgnoreCamera = true;
             //
 
             hpBar = new RectangleObject(150, (int)hpMeasure.Y)
@@ -151,7 +154,7 @@ namespace AShamanJourney
 
         public void UpdateXp(Player player)
         {
-            xpBar.Scale = new Vector2(player.Stats.Xp / player.Stats.XpForNextLevel, 1f);
+            xpBar.Scale = new Vector2((float)player.Stats.Xp / player.Stats.XpForNextLevel, 1f);
             xpNumber.Text = $"{player.Stats.Xp} - {player.Stats.XpForNextLevel}";
             var xpNumberMeasure = xpNumber.Measure();
             xpNumber.X = xpBarBorder.X + (xpBarBorder.Width / 2) - (xpNumberMeasure.X / 2);
@@ -166,7 +169,15 @@ namespace AShamanJourney
 
         public void UpdateWave()
         {
-            wave.Text = $"Wave: {GameManager.Wave} - Next Wave: {((Game)Engine.Objects["game"]).Timer.Get("nextWave")}";
+            wave.Text = $"Wave {GameManager.Wave}";
+            var waveMeasure = wave.Measure();
+            wave.X = Engine.Width - waveMeasure.X - Padding;
+            wave.Y = Padding;
+
+            waveTimer.Text = $"Next Wave {(int) ((Game)Engine.Objects["game"]).Timer.Get("nextWave")}s";
+            var waveTimerMeasure = waveTimer.Measure();
+            waveTimer.X = Engine.Width - waveTimerMeasure.X - Padding;
+            waveTimer.Y = wave.Y + waveMeasure.Y + Padding;
         }
     }
 }

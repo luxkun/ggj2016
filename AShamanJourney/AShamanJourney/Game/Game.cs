@@ -21,17 +21,17 @@ namespace AShamanJourney
 
         private void SpawnEnemies()
         {
-            if (Timer.Get("nextWave") <= 0)
+            var world = (World)Engine.Objects["world"];
+            if (Timer.Get("nextWave") <= 0 || World.SpawnedObjects[2].Count <= 0)
             {
-                float delay = 60 - GameManager.LocalTimer/60f;
+                float delay = 90 - GameManager.LocalTimer/60f;
                 if (delay < minWaveDelay)
                     delay = minWaveDelay;
                 GameManager.Wave++;
                 Timer.Set("nextWave", delay);
 
-                for (int i = 0; i < (3 + GameManager.Wave*2); i++)
+                for (int i = 0; i < 6 + GameManager.Wave*2; i++)
                 {
-                    var world = (World)Engine.Objects["world"];
                     var start = world.calculatedStart;
                     var end = world.calculatedEnd;
                     var xLen = end.X - start.X;
@@ -41,6 +41,8 @@ namespace AShamanJourney
                     while (world.PickRandomObject((int) choosenX, (int) choosenY, 2) == null) { }
                 }
             }
+            var hud = (Hud) Engine.Objects["hud"];
+            hud.UpdateWave();
         }
 
         private void UpdateTimers()
@@ -49,7 +51,6 @@ namespace AShamanJourney
             GameManager.LocalTimer += DeltaTime;
             ((Hud)Engine.Objects["hud"]).UpdateTimer();
         }
-
 
         public override void Start()
         {
